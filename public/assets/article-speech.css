@@ -1,0 +1,18 @@
+.art-speech{position:relative;z-index:1;max-width:calc(var(--cw) - 48px);margin:0 auto 34px;padding:18px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid rgba(0,240,255,.24);border-radius:16px;background:linear-gradient(125deg,rgba(0,240,255,.07),rgba(168,85,247,.045) 65%,rgba(255,255,255,.02));box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.04)}
+.art-speech[hidden]{display:none}
+.art-speech-info{display:flex;align-items:center;gap:12px;flex:1;min-width:190px}
+.art-speech-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:12px;background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.28);color:var(--cy)}
+.art-speech-icon svg{width:22px;height:22px}
+.art-speech-info strong{display:block;font:700 14px var(--ff);color:var(--tx)}
+.art-speech-info small,.art-speech-status{display:block;color:var(--mt2);font:11px var(--fm)}
+.art-speech-actions{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
+.art-speech-voice-label{display:flex;flex-direction:column;gap:4px;color:var(--mt2);font:10px var(--fm)}
+.art-speech-voice-label select{min-height:37px;max-width:min(270px,65vw);padding:8px 10px;border:1px solid rgba(0,240,255,.28);border-radius:9px;background:#090f19;color:var(--tx);font:11px var(--fm);cursor:pointer}
+.art-speech-voice-label select:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.art-speech-actions button{cursor:pointer;border:1px solid rgba(0,240,255,.38);border-radius:9px;padding:10px 16px;background:rgba(0,240,255,.09);color:var(--cy);font:700 11px var(--fm);transition:background .2s,box-shadow .2s,transform .2s}
+.art-speech-actions button:hover,.art-speech-actions button:focus-visible{background:rgba(0,240,255,.2);box-shadow:0 0 15px rgba(0,240,255,.13);outline:2px solid rgba(0,240,255,.35);outline-offset:2px}
+.art-speech-actions button:active{transform:scale(.97)}
+.art-speech-actions button:disabled{opacity:.4;cursor:default}
+.art-speech-status{width:100%}
+@media(max-width:600px){.art-speech{max-width:calc(100% - 40px);padding:16px}.art-speech-actions{width:100%}.art-speech-voice-label{width:100%}.art-speech-voice-label select{max-width:100%;width:100%}.art-speech-actions button{flex:1}}
+@media(prefers-reduced-motion:reduce){.art-speech-actions button{transition:none}}

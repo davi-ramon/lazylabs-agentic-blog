@@ -1,0 +1,16 @@
+{
+  "firebaseProjectId": "your-firebase-project",
+  "hostingSiteId": "your-blog",
+  "siteDomain": "blog.example.com",
+  "companyDomain": "",
+  "firebaseWebApiKey": "YOUR_FIREBASE_WEB_API_KEY",
+  "firebaseSenderId": "YOUR_FIREBASE_SENDER_ID",
+  "firebaseAppId": "YOUR_FIREBASE_APP_ID",
+  "instagramBusinessId": "YOUR_INSTAGRAM_BUSINESS_ID",
+  "metaPageId": "YOUR_META_PAGE_ID",
+  "whatsappNumber": "YOUR_WHATSAPP_NUMBER",
+  "metaPixelId": "YOUR_META_PIXEL_ID",
+  "supabaseProjectRef": "your-supabase-project",
+  "supabasePublishableKey": "YOUR_SUPABASE_PUBLISHABLE_KEY",
+  "appsScriptDeploymentId": "YOUR_APPS_SCRIPT_DEPLOYMENT_ID"
+}

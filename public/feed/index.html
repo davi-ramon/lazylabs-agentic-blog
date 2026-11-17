@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#020208">
+  <title>Feed de artigos — Lazy Labs</title>
+  <meta name="description" content="Explore artigos, projetos e ideias da Lazy Labs em um feed organizado por temas.">
+  <link rel="canonical" href="https://blog.example.com/feed/">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/button-depth.css">
+  <link rel="stylesheet" href="/feed/style.css?v=20261030a">
+  <link rel="stylesheet" href="/feed/sidebar.css?v=20261030a">
+  <link rel="stylesheet" href="/feed/responsive.css?v=20261114">
+  <script defer src="/feed/ranking.js?v=20261030"></script>
+  <script defer src="/feed/app.js?v=20261114"></script>
+  <script defer src="/feed/sidebar.js?v=20261030c"></script>
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner">
+    <a class="brand" href="/" aria-label="Lazy Labs Blog, início">[LAZY <span>LABS]</span><small>blog</small></a>
+    <nav aria-label="Navegação principal"><a href="/">Início</a><a href="/feed" aria-current="page">Feed</a><a href="/?categoria=projetos">Projetos</a><a href="/favoritos">Favoritos</a></nav>
+    <a class="top-cta" href="https://example.com/form-diagnostico">Trabalhar com a gente ↗</a>
+  </div></header>
+  <div class="layout" id="layout">
+    <aside class="sidebar" id="sidebar" aria-label="Tópicos do feed">
+      <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-top"><span class="sidebar-heading">EXPLORAR</span><button id="sidebar-toggle" type="button" aria-label="Recolher tópicos" aria-controls="sidebar-expand" aria-expanded="true"><span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span></button></div>
+      <button class="topic-link active" type="button" data-view="all"><span class="topic-symbol">▦</span><span class="topic-text">Todos os artigos</span></button>
+      <button class="topic-link" type="button" data-view="recent"><span class="topic-symbol">◷</span><span class="topic-text">Mais recentes</span></button>
+      <a class="topic-link" href="/favoritos"><span class="topic-symbol">♡</span><span class="topic-text">Meus favoritos</span></a>
+      <div class="sidebar-expand" id="sidebar-expand">
+      <div class="topic-section"><div class="topic-heading">TÓPICOS PARA VOCÊ</div><div id="topic-list"></div></div>
+      <div class="sidebar-foot"><span>Os tópicos acompanham os assuntos dos artigos.</span></div>
+      </div></div>
+      <div class="sidebar-scrollbar" id="sidebar-scrollbar" aria-hidden="true"><div class="sidebar-thumb" id="sidebar-thumb"></div></div>
+    </aside>
+    <main class="main" id="main">
+      <div class="intro"><div><span class="eyebrow">LAZY LABS / DESCOBRIR</span><h1>Um feed para <em>explorar ideias.</em></h1><p>Artigos, projetos e reflexões no ritmo da sua curiosidade.</p></div><span class="feed-mark" aria-hidden="true">[↗]</span></div>
+      <section class="controls" aria-label="Controles do feed">
+        <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input id="feed-search" type="search" placeholder="Buscar artigos, assuntos ou palavras..." aria-label="Buscar no feed"></div>
+        <div class="view-controls"><button type="button" class="sort active" data-sort="for-you">Para você</button><button type="button" class="sort" data-sort="recent">Recentes</button></div>
+      </section>
+      <section class="personalization" id="personalization"><div><strong id="personalization-title">Seu feed pode aprender com você</strong><p id="personalization-description">Ative a personalização para ordenar artigos pelos temas que você lê. Os interesses ficam somente neste navegador.</p></div><button id="personalization-action" type="button">Ativar</button></section>
+      <div class="feed-section-title"><div><span id="feed-title">Artigos para explorar</span><small id="feed-count"></small></div><span id="feed-context">Novidades e assuntos em destaque</span></div>
+      <div class="feed-list" id="feed-list" aria-live="polite"><div class="loading-card">Carregando artigos…</div></div>
+      <button type="button" id="load-more" class="load-more" hidden>Mostrar mais artigos ↓</button>
+    </main>
+    <aside class="rail" aria-label="Descobertas"><div class="rail-card"><span class="eyebrow">COMO FUNCIONA</span><h2>Encontre seu próximo assunto.</h2><p>Escolha um tema na lateral ou abra um artigo. Quando a personalização estiver ativa, o feed aprende com as leituras neste navegador.</p><a href="/">Ver a página inicial ↗</a><br><a href="/favoritos">Meus favoritos ↗</a></div><div class="rail-card"><span class="eyebrow">SEU CONTROLE</span><p>Você pode limpar os interesses a qualquer momento.</p><button id="clear-interests" type="button">Limpar meus interesses</button></div></aside>
+  </div>
+  <footer><a href="/">[LAZY <span>LABS]</span></a><span>Artigos para ler, testar e discutir.</span><a href="https://example.com/politica-de-privacidade">Privacidade</a></footer>
+</body>
+</html>

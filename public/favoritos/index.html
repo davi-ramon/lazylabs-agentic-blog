@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Meus favoritos — Lazy Labs Blog</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Outfit:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{font-family:Outfit,sans-serif;color:#e8e8f5;background:#020208}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,rgba(0,240,255,.07),transparent 50%),#020208}a{color:inherit;text-decoration:none}button,input{font:inherit}header{border-bottom:1px solid rgba(255,255,255,.08)}header>div{max-width:1080px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font:700 17px Unbounded,sans-serif}.brand span{color:#00f0ff}.back{font:11px 'JetBrains Mono',monospace;color:#9e9eb9}main{max-width:1080px;margin:50px auto;padding:0 24px}h1{font:700 clamp(25px,4vw,40px) Unbounded,sans-serif;line-height:1.3}h1 span{color:#00f0ff}.intro{color:#a4a4bb}.panel{max-width:480px;background:#0b0b17;border:1px solid rgba(0,240,255,.2);border-radius:14px;padding:24px;margin-top:28px}.panel h2{font:700 18px Unbounded,sans-serif;margin-top:0}.panel p{color:#aaaac2}.panel input{display:block;width:100%;padding:13px;border-radius:8px;border:1px solid #35354a;color:#fff;background:#050510;margin:12px 0}.panel input:focus{outline:2px solid #00f0ff}.panel button,.signout{border:1px solid #00f0ff;border-radius:8px;padding:12px 16px;color:#020208;background:#00f0ff;cursor:pointer;font-weight:600}.panel button:hover,.signout:hover{box-shadow:0 0 20px rgba(0,240,255,.25)}.panel .secondary{background:transparent;color:#00f0ff}.actions{display:flex;flex-wrap:wrap;gap:10px}.error{color:#ff7895!important;min-height:1.4em}.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;margin-top:28px}.card{background:#0b0b17;border:1px solid rgba(255,255,255,.09);border-radius:12px;overflow:hidden}.card:hover{border-color:rgba(0,240,255,.4)}.card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.card div{padding:18px}.card h2{font:700 16px/1.45 Unbounded,sans-serif}.card p{color:#a4a4bb;line-height:1.5}.card a{color:#00f0ff;font:11px 'JetBrains Mono',monospace}.signout{margin-top:20px}.empty{color:#a4a4bb;margin-top:25px}
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="/reader-account.js?v=20261114"></script>
+  <script defer src="/favoritos/app.js?v=20261114"></script>
+</head>
+<body>
+  <header><div><a class="brand" href="/">[LAZY <span>LABS]</span></a><a class="back" href="/feed">← Voltar ao feed</a></div></header>
+  <main><h1>Meus <span>favoritos.</span></h1><p class="intro">Salve artigos no coração e encontre todos aqui na sua conta.</p>
+    <section class="panel" id="auth-panel" hidden><h2>Entre na sua conta</h2><p>Você pode usar uma conta Google ou criar uma conta com e-mail.</p>
+      <div class="actions"><button id="google" type="button">Continuar com Google</button></div>
+      <form id="email-form"><input id="email" type="email" autocomplete="email" placeholder="Seu e-mail" required><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Senha (mínimo de 6 caracteres)" required><div class="actions"><button type="submit">Entrar</button><button class="secondary" id="create" type="button">Criar conta</button></div></form>
+      <p class="error" id="auth-error" role="alert"></p>
+    </section>
+    <section id="favorites-panel" hidden><p id="account-name" class="intro"></p><div class="list" id="favorites-list" aria-live="polite"></div><button class="signout" id="signout" type="button">Sair da conta</button></section>
+  </main>
+</body>
+</html>

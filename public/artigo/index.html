@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lazy Labs Blog</title>
+<meta name="description" content="">
+<meta property="og:title" content=""><meta property="og:description" content="">
+<meta property="og:image" content=""><meta property="og:type" content="article">
+<meta property="og:url" content=""><link rel="canonical" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL = 'https://your-supabase-project.supabase.co';
+const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root{--bg:#020208;--bg2:#06060f;--glass:rgba(255,255,255,.04);--gb:rgba(255,255,255,.07);--cy:#00f0ff;--pu2:#a855f7;--pk:#ff006e;--gn:#00ff9d;--tx:#e8e8f5;--mt:#4a4a6a;--mt2:#7a7a9a;--fh:"Unbounded",sans-serif;--fb:"Outfit",sans-serif;--fm:"JetBrains Mono",monospace;--gcyan:0 0 18px rgba(0,240,255,.35),0 0 50px rgba(0,240,255,.12);--gpu:0 0 18px rgba(168,85,247,.4),0 0 50px rgba(168,85,247,.15);--cw:720px}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:16px;line-height:1.7;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(0,240,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.018) 1px,transparent 1px);background-size:44px 44px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.018) 2px,rgba(0,0,0,.018) 4px)}
+
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:100;background:rgba(2,2,8,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,240,255,.07)}
+.ni{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:.05em;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-b{color:var(--cy)}.logo-tag{font-family:var(--fm);font-size:9px;padding:2px 8px;border-radius:2px;background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.2);color:var(--cy);letter-spacing:.1em}
+.nav-back{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt2);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}.nav-back:hover{color:var(--cy)}
+.nav-cta{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--cy);border:none;padding:8px 16px;border-radius:3px;cursor:pointer;text-decoration:none;transition:all .2s}.nav-cta:hover{box-shadow:var(--gcyan)}
+
+/* ── Article hero ──────────────────────────────────────────────────────────── */
+.art-hero{position:relative;z-index:1;padding:60px 24px 0;max-width:var(--cw);margin:0 auto}
+
+/* TOC (Tabela de Conteudo) sticky no canto */
+.art-layout{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:32px;max-width:calc(var(--cw) + 280px);margin:0 auto;padding:0 24px;align-items:start}
+.art-layout .art-body{min-width:0}
+.toc-wrap{position:sticky;top:80px;background:rgba(6,6,15,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px;max-height:calc(100vh - 120px);overflow-y:auto}
+.toc-label{font-family:var(--fm);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--cy);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.05)}
+.toc-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.toc-list a{font-family:var(--fb);font-size:12px;line-height:1.4;color:var(--mt2);text-decoration:none;padding:4px 8px;border-radius:4px;border-left:2px solid transparent;transition:all .2s;display:block}
+.toc-list a:hover{color:var(--cy);background:rgba(0,240,255,.04)}
+.toc-list a.active{color:var(--cy);background:rgba(0,240,255,.07);border-left-color:var(--cy)}
+.breadcrumb{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mt2);display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.breadcrumb a{color:var(--mt2);text-decoration:none;transition:color .2s}.breadcrumb a:hover{color:var(--cy)}.breadcrumb span{opacity:.4}
+.art-cat{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.18);border-radius:2px;padding:4px 12px;display:inline-block;margin-bottom:16px}
+.art-title{font-family:var(--fh);font-size:clamp(24px,4vw,42px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:16px}
+.art-excerpt{font-size:17px;color:var(--mt2);line-height:1.75;margin-bottom:24px}
+.art-meta{display:flex;align-items:center;flex-wrap:wrap;gap:14px;font-family:var(--fm);font-size:11px;color:var(--mt2);padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.art-meta .author{color:var(--tx);font-weight:500}.art-meta .sep{opacity:.3}
+.art-tags{display:flex;flex-wrap:wrap;gap:6px;padding-top:16px;margin-bottom:36px}
+.art-tag{font-family:var(--fm);font-size:10px;padding:3px 10px;border-radius:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:var(--mt2)}
+
+/* ── Cover & audio ─────────────────────────────────────────────────────────── */
+.art-cover{position:relative;z-index:1;max-width:var(--cw);margin:0 auto 40px;padding:0 24px}
+.cover-img{width:100%;max-height:400px;object-fit:cover;border-radius:10px;display:block;border:1px solid rgba(255,255,255,.06)}
+.cover-ph{width:100%;height:240px;background:linear-gradient(135deg,rgba(0,240,255,.06),rgba(124,58,237,.06));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:52px;border:1px solid rgba(255,255,255,.06)}
+.art-audio{position:relative;z-index:1;max-width:var(--cw);margin:0 auto 32px;padding:0 24px}
+.audio-box{background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px}
+.audio-icon{font-size:22px;flex-shrink:0}.audio-info{flex:1}
+.audio-label{font-family:var(--fh);font-size:12px;font-weight:700;color:var(--pu2);margin-bottom:4px}
+.audio-sub{font-family:var(--fm);font-size:10px;color:var(--mt2)}
+.audio-box audio{width:100%;height:36px;accent-color:var(--pu2)}
+.audio-embed{border-radius:10px;overflow:hidden;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2)}
+.audio-embed-header{padding:12px 16px 0;display:flex;align-items:center;gap:10px}
+.audio-embed-label{font-family:var(--fh);font-size:12px;font-weight:700;color:var(--pu2)}
+.audio-embed-sub{font-family:var(--fm);font-size:10px;color:var(--mt2)}
+.audio-embed iframe{display:block;width:100%;border:none}
+
+/* ── Article grid + body ───────────────────────────────────────────────────── */
+.art-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr min(var(--cw),100%) 1fr;padding:0 24px;margin-bottom:60px}
+.art-grid>*{grid-column:2}
+.art-sidebar{position:sticky;top:80px;grid-column:1;padding-right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;height:fit-content;margin-top:8px}
+.s-btn{width:38px;height:38px;border-radius:50%;background:var(--glass);border:1px solid var(--gb);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:15px;cursor:pointer;text-decoration:none;transition:all .2s;color:var(--tx)}
+.s-btn:hover{border-color:rgba(0,240,255,.3);color:var(--cy)}.like-btn.liked{border-color:rgba(255,0,110,.3)!important;color:var(--pk)!important}
+.like-n{font-family:var(--fm);font-size:9px;color:var(--mt2);margin-top:1px}
+.art-body{font-size:16px;line-height:1.85;color:#c0c0d8}
+.art-body h1,.art-body h2{font-family:var(--fh);color:var(--tx);letter-spacing:-.01em;margin:44px 0 16px;line-height:1.15}
+.art-body h1{font-size:clamp(20px,3vw,28px);font-weight:700}.art-body h2{font-size:clamp(17px,2.5vw,23px);font-weight:700}
+.art-body h3{font-family:var(--fh);font-size:clamp(14px,2vw,18px);font-weight:600;color:var(--tx);margin:32px 0 12px;letter-spacing:-.01em}
+.art-body p{margin-bottom:22px}.art-body p:last-child{margin-bottom:0}
+.art-body a{color:var(--cy);text-decoration:none;border-bottom:1px solid rgba(0,240,255,.3);transition:border-color .2s}.art-body a:hover{border-color:var(--cy)}
+.art-body strong,.art-body b{color:var(--tx);font-weight:600}.art-body em{color:var(--pu2);font-style:normal}
+.art-body ul,.art-body ol{margin:0 0 22px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.art-body ul li,.art-body ol li{padding-left:22px;position:relative}
+.art-body ul li::before{content:"\2014";position:absolute;left:0;color:var(--cy);font-size:13px}
+.art-body ol{counter-reset:oc}.art-body ol li{counter-increment:oc}
+.art-body ol li::before{content:counter(oc)".";position:absolute;left:0;color:var(--cy);font-family:var(--fm);font-size:12px;font-weight:600;top:2px}
+.art-body blockquote{border-left:3px solid var(--cy);padding:16px 20px;margin:28px 0;background:rgba(0,240,255,.03);border-radius:0 8px 8px 0}
+.art-body blockquote p{margin:0;color:#9090c0;font-style:italic}
+.art-body code{font-family:var(--fm);font-size:13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 7px;border-radius:4px;color:var(--cy)}
+.art-body pre{background:rgba(0,0,0,.5);border:1px solid rgba(0,240,255,.12);border-radius:8px;padding:20px 24px;margin:24px 0;overflow-x:auto}
+.art-body pre code{background:none;border:none;padding:0;color:#c0f0d0;font-size:13px}
+.art-body img{width:100%;border-radius:8px;margin:24px 0;border:1px solid rgba(255,255,255,.06);display:block}
+.art-body hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:36px 0}
+.art-body .callout{background:rgba(0,255,157,.04);border:1px solid rgba(0,255,157,.15);border-radius:8px;padding:18px 20px;margin:24px 0;color:#8be5c3;font-size:15px;line-height:1.75}
+.vid-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:28px 0;border:1px solid rgba(255,255,255,.06)}
+.vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+
+/* ── Project links ─────────────────────────────────────────────────────────── */
+.proj-links{position:relative;z-index:1;max-width:var(--cw);margin:-20px auto 20px;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}
+
+.related-wrap{position:relative;z-index:1;max-width:var(--cw);margin:0 auto 24px;padding:0 24px}
+.related-label{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mt2);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.related-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05)}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.related-card{background:var(--glass);border:1px solid var(--gb);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--tx);transition:all .2s;display:flex;flex-direction:column;gap:8px}
+.related-card:hover{border-color:rgba(0,240,255,.3);background:rgba(0,240,255,.04);transform:translateY(-2px)}
+.related-cat{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--cy)}
+.related-title{font-family:var(--fb);font-size:14px;font-weight:600;line-height:1.35;letter-spacing:-.01em}
+.related-meta{font-family:var(--fm);font-size:9px;color:var(--mt2);letter-spacing:.08em;text-transform:uppercase}
+.plink{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 18px;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.plink-gh{color:var(--tx);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}.plink-gh:hover{border-color:rgba(255,255,255,.3)}
+.plink-demo{color:var(--bg);background:var(--cy)}.plink-demo:hover{box-shadow:var(--gcyan)}
+
+/* ── CTA ───────────────────────────────────────────────────────────────────── */
+.art-cta-wrap{position:relative;z-index:1;max-width:var(--cw);margin:0 auto;padding:0 24px}
+.art-cta{background:linear-gradient(135deg,rgba(0,240,255,.05),rgba(124,58,237,.05));border:1px solid rgba(0,240,255,.15);border-radius:14px;padding:36px;text-align:center;position:relative;overflow:hidden}
+.art-cta::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cy),transparent)}
+.cta-t{font-family:var(--fh);font-size:clamp(17px,2.5vw,23px);font-weight:700;margin-bottom:10px;letter-spacing:-.01em}
+.cta-s{font-size:14px;color:var(--mt2);margin-bottom:24px;line-height:1.7}
+.cta-a{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--cy);border:none;padding:14px 28px;border-radius:3px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s}.cta-a:hover{box-shadow:var(--gcyan);transform:translateY(-1px)}
+
+/* ── Newsletter block ──────────────────────────────────────────────────────── */
+.nl-wrap{position:relative;z-index:1;max-width:var(--cw);margin:32px auto 0;padding:0 24px}
+.nl-box{background:linear-gradient(135deg,rgba(168,85,247,.06),rgba(0,240,255,.025));border:1px solid rgba(168,85,247,.22);border-radius:14px;padding:36px;position:relative;overflow:hidden;transition:border-color .3s}
+.nl-box:hover{border-color:rgba(168,85,247,.35)}
+.nl-box::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--pu2),transparent)}
+.nl-box::after{content:"";position:absolute;bottom:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.08),transparent 70%);pointer-events:none}
+.nl-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--pu2);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.nl-eyebrow::before{content:"";width:20px;height:1px;background:var(--pu2);opacity:.5}
+.nl-t{font-family:var(--fh);font-size:clamp(16px,2.5vw,22px);font-weight:700;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+.nl-s{font-size:14px;color:var(--mt2);line-height:1.75;margin-bottom:24px;max-width:520px}
+.nl-fields{display:flex;gap:10px;margin-bottom:12px}
+.nl-input{flex:1;min-width:0;background:rgba(168,85,247,.05);border:1px solid rgba(168,85,247,.18);border-radius:6px;padding:12px 16px;color:var(--tx);font-family:var(--fb);font-size:14px;outline:none;transition:all .2s}
+.nl-input:focus{border-color:var(--pu2);background:rgba(168,85,247,.08);box-shadow:0 0 0 3px rgba(168,85,247,.08)}
+.nl-input::placeholder{color:var(--mt)}
+.nl-btn{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--pu2);border:none;padding:12px 22px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.nl-btn:hover:not(:disabled){box-shadow:var(--gpu);transform:translateY(-1px)}
+.nl-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.nl-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:4px}
+.nl-check input[type=checkbox]{margin-top:3px;accent-color:var(--pu2);cursor:pointer;width:14px;height:14px;flex-shrink:0}
+.nl-check label{font-size:12px;color:var(--mt2);line-height:1.65;cursor:pointer;user-select:none}
+.nl-msg{font-size:13px;margin-top:14px;padding:11px 16px;border-radius:7px;display:none;line-height:1.6}
+.nl-msg.ok{background:rgba(0,255,157,.07);border:1px solid rgba(0,255,157,.2);color:var(--gn)}
+.nl-msg.err{background:rgba(255,0,110,.07);border:1px solid rgba(255,0,110,.2);color:var(--pk)}
+.nl-msg.info{background:rgba(0,240,255,.07);border:1px solid rgba(0,240,255,.2);color:var(--cy)}
+.nl-already{text-align:center;padding:20px 0}
+.nl-already-icon{font-size:32px;margin-bottom:8px}
+.nl-already-t{font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:4px}
+.nl-already-s{font-size:13px;color:var(--mt2)}
+
+/* ── Section divider ───────────────────────────────────────────────────────── */
+.sec-div{position:relative;z-index:1;max-width:var(--cw);margin:48px auto 0;padding:0 24px}
+.sec-div-inner{border-top:1px solid rgba(255,255,255,.05)}
+
+/* ── Comments block ────────────────────────────────────────────────────────── */
+.cm-wrap{position:relative;z-index:1;max-width:var(--cw);margin:48px auto 0;padding:0 24px}
+.cm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.cm-title-row{display:flex;align-items:center;gap:12px}
+.cm-title{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:-.01em}
+.cm-badge{font-family:var(--fm);font-size:10px;letter-spacing:.08em;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:3px 10px;color:var(--mt2)}
+.cm-form-box{background:rgba(255,255,255,.022);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;margin-bottom:32px}
+.cm-mode-tabs{display:flex;gap:3px;margin-bottom:20px;background:rgba(255,255,255,.04);border-radius:7px;padding:3px}
+.cm-tab{flex:1;font-family:var(--fm);font-size:11px;letter-spacing:.07em;text-transform:uppercase;padding:8px 12px;border:none;background:transparent;color:var(--mt2);cursor:pointer;border-radius:5px;transition:all .25s}
+.cm-tab.active{background:rgba(255,255,255,.09);color:var(--tx)}
+.cm-tab:hover:not(.active){color:var(--tx)}
+.cm-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.cm-input{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:11px 14px;color:var(--tx);font-family:var(--fb);font-size:14px;outline:none;transition:all .2s;width:100%}
+.cm-input:focus{border-color:rgba(0,240,255,.3);background:rgba(0,240,255,.025)}
+.cm-input::placeholder{color:var(--mt)}
+.cm-textarea{resize:vertical;min-height:108px;line-height:1.65;margin-bottom:0}
+.cm-footer-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}
+.cm-hint{font-family:var(--fm);font-size:10px;color:var(--mt);letter-spacing:.04em}
+.cm-submit{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--cy);border:none;padding:11px 22px;border-radius:4px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cm-submit:hover:not(:disabled){box-shadow:var(--gcyan)}
+.cm-submit:disabled{opacity:.5;cursor:not-allowed}
+.cm-form-msg{font-size:13px;margin-top:12px;padding:10px 14px;border-radius:6px;display:none;width:100%}
+.cm-form-msg.ok{background:rgba(0,255,157,.07);border:1px solid rgba(0,255,157,.2);color:var(--gn)}
+.cm-form-msg.err{background:rgba(255,0,110,.07);border:1px solid rgba(255,0,110,.2);color:var(--pk)}
+/* Comments list */
+.cm-list{display:flex;flex-direction:column;gap:3px}
+.cm-empty{text-align:center;padding:44px 0;font-family:var(--fm);font-size:11px;color:var(--mt);letter-spacing:.08em;text-transform:uppercase}
+.cm-loading-row{text-align:center;padding:28px 0;font-family:var(--fm);font-size:11px;color:var(--mt);letter-spacing:.08em;animation:sk 1.4s ease-in-out infinite}
+.cm-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:20px 22px;transition:background .2s;animation:fadeUp .3s ease both}
+.cm-item:hover{background:rgba(255,255,255,.03)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cm-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.cm-author-wrap{display:flex;align-items:center;gap:8px}
+.cm-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,240,255,.2));border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:11px;font-weight:600;color:var(--tx);flex-shrink:0;text-transform:uppercase}
+.cm-author{font-family:var(--fm);font-size:12px;font-weight:600;color:var(--cy)}
+.cm-author.anon{color:var(--mt2)}
+.cm-date{font-family:var(--fm);font-size:10px;color:var(--mt);flex-shrink:0}
+.cm-text{font-size:14px;color:#b8b8d0;line-height:1.78;white-space:pre-wrap;word-break:break-word}
+
+/* ── Related articles ──────────────────────────────────────────────────────── */
+.rel-wrap{position:relative;z-index:1;max-width:1100px;margin:60px auto 0;padding:0 24px 80px}
+.sec-lbl{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mt2);display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.sec-lbl::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.05)}
+.rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;background:rgba(255,255,255,.03)}
+.rel-card{background:var(--bg);padding:22px;cursor:pointer;transition:background .2s;text-decoration:none;display:block;color:inherit;position:relative;overflow:hidden}
+.rel-card:hover{background:rgba(0,240,255,.018)}.rel-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cy),transparent);opacity:0;transition:opacity .2s}.rel-card:hover::before{opacity:1}
+.rc-cat{font-family:var(--fm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--cy);margin-bottom:7px}
+.rc-t{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;line-height:1.3}
+.rc-m{font-family:var(--fm);font-size:10px;color:var(--mt);margin-top:10px}
+
+/* ── Skeleton + states ─────────────────────────────────────────────────────── */
+.sk{animation:sk 1.4s ease-in-out infinite}@keyframes sk{0%,100%{opacity:.4}50%{opacity:.8}}.skb{background:rgba(255,255,255,.06);border-radius:3px}
+.st-wrap{text-align:center;padding:100px 24px;position:relative;z-index:1}
+.st-icon{font-size:48px;margin-bottom:20px}.st-t{font-family:var(--fh);font-size:20px;font-weight:700;margin-bottom:10px}
+.st-s{font-size:14px;color:var(--mt2);max-width:420px;margin:0 auto 24px;line-height:1.8}
+.st-btn{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--cy);border:none;padding:12px 24px;border-radius:3px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}.st-btn:hover{box-shadow:var(--gcyan)}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+footer{position:relative;z-index:1;padding:36px 24px 24px;border-top:1px solid rgba(255,255,255,.04);text-align:center}
+.ft{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:12px}
+.fl{font-family:var(--fh);font-size:13px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.2)}.fl span{color:rgba(0,240,255,.4)}
+.fll{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}.fll a{font-family:var(--fm);font-size:10px;color:var(--mt);text-decoration:none;letter-spacing:.08em;transition:color .2s}.fll a:hover{color:var(--cy)}
+.fc{font-family:var(--fm);font-size:10px;color:var(--mt)}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:900px){
+  .art-grid{grid-template-columns:1fr;padding:0 20px}.art-grid>*{grid-column:1}.art-sidebar{display:none}
+  .art-hero,.art-cover,.art-audio,.art-cta-wrap,.proj-links,.nl-wrap,.cm-wrap,.sec-div{padding:0 20px}
+  .art-hero{padding-top:40px}
+}
+@media(max-width:600px){
+  .nav-cta{display:none}.art-hero{padding-top:36px}.art-cta{padding:22px}
+  .rel-grid{grid-template-columns:1fr}
+  .nl-fields{flex-direction:column}.nl-btn{width:100%}
+  .nl-box{padding:24px}
+  .cm-form-box{padding:18px}
+  .cm-row{flex-direction:column}
+  .cm-footer-row{flex-direction:column;align-items:flex-start}
+  .cm-submit{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="ni">
+    <a href="https://blog.example.com" class="logo"><span><span class="logo-b">[</span>LAZY<span class="logo-b"> LABS]</span></span><span class="logo-tag">blog</span></a>
+    <a href="https://blog.example.com" class="nav-back">&larr; Todos os artigos</a>
+    <a href="https://example.com/agendar" class="nav-cta" target="_blank">Trabalhar com a gente &rarr;</a>
+  </div>
+</nav>
+
+<!-- Loading skeleton -->
+<div id="st-loading" style="position:relative;z-index:1;max-width:720px;margin:60px auto;padding:0 24px">
+  <div class="skb sk" style="height:12px;width:140px;margin-bottom:20px"></div>
+  <div class="skb sk" style="height:14px;width:100px;margin-bottom:16px"></div>
+  <div class="skb sk" style="height:38px;margin-bottom:8px"></div>
+  <div class="skb sk" style="height:38px;width:75%;margin-bottom:20px"></div>
+  <div class="skb sk" style="height:16px;margin-bottom:6px"></div>
+  <div class="skb sk" style="height:16px;width:85%;margin-bottom:6px"></div>
+  <div class="skb sk" style="height:16px;width:60%;margin-bottom:28px"></div>
+  <div class="skb sk" style="height:280px;border-radius:10px;margin-bottom:36px"></div>
+  <div class="skb sk" style="height:16px;margin-bottom:8px"></div>
+  <div class="skb sk" style="height:16px;width:90%;margin-bottom:8px"></div>
+  <div class="skb sk" style="height:16px;width:70%"></div>
+</div>
+
+<!-- 404 state -->
+<div id="st-404" class="st-wrap" style="display:none">
+  <div class="st-icon">&#128205;</div>
+  <div class="st-t">Artigo n&atilde;o encontrado</div>
+  <p class="st-s">Este artigo n&atilde;o existe ou foi removido. Volte para a home e explore outros conte&uacute;dos.</p>
+  <a href="https://blog.example.com" class="st-btn">&larr; Ver todos os artigos</a>
+</div>
+
+<!-- Error state -->
+<div id="st-error" class="st-wrap" style="display:none">
+  <div class="st-icon">&#9888;&#65039;</div>
+  <div class="st-t">Erro ao carregar</div>
+  <p class="st-s" id="err-msg">N&atilde;o foi poss&iacute;vel carregar este artigo.</p>
+  <button class="st-btn" onclick="location.reload()">Tentar novamente</button>
+</div>
+
+<!-- Article root -->
+<div id="art-root" style="display:none">
+
+  <!-- Hero -->
+  <div class="art-hero">
+    <div class="breadcrumb"><a href="https://blog.example.com">Blog</a><span>/</span><span id="bc-cat"></span></div>
+    <div class="art-cat" id="art-cat"></div>
+    <h1 class="art-title" id="art-title"></h1>
+    <p class="art-excerpt" id="art-excerpt"></p>
+    <div class="art-meta">
+      <span class="author" id="m-author"></span><span class="sep">&middot;</span>
+      <span id="m-date"></span><span class="sep">&middot;</span>
+      <span id="m-read">&#8987; 5 min</span>
+      <span class="sep" id="m-vsep">&middot;</span><span id="m-views"></span>
+    </div>
+    <div class="art-tags" id="art-tags"></div>
+  </div>
+
+  <!-- Cover -->
+  <div class="art-cover" id="art-cover"></div>
+
+  <!-- Audio -->
+  <div class="art-audio" id="art-audio" style="display:none">
+    <div id="audio-player-container"></div>
+  </div>
+
+  <!-- Article grid (sidebar + body) -->
+  <div class="art-grid">
+    <div class="art-sidebar">
+      <button class="s-btn like-btn" id="like-btn" onclick="toggleLike()" title="Curtir">&#10084;<span class="like-n" id="like-n">0</span></button>
+      <a class="s-btn" id="sh-tw" href="#" target="_blank" title="X">&#120143;</a>
+      <a class="s-btn" id="sh-wpp" href="#" target="_blank" title="WhatsApp">&#128172;</a>
+      <button class="s-btn" onclick="copyLink()" id="sh-copy" title="Copiar link">&#128279;</button>
+    </div>
+    <div class="art-layout" id="art-layout">
+      <article class="art-body" id="art-body"></article>
+      <aside class="toc-wrap" id="toc-wrap" style="display:none">
+        <div class="toc-label">Sumario</div>
+        <ul class="toc-list" id="toc-list"></ul>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Project links -->
+  <div class="proj-links" id="proj-links"></div>
+
+  <!-- LEIA TAMBEM (Posts relacionados) -->
+  <div class="related-wrap" id="related-wrap" style="display:none">
+    <div class="related-label">Leia tambem</div>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="art-cta-wrap">
+    <div class="art-cta">
+      <div class="cta-t">Gostou deste projeto?</div>
+      <p class="cta-s">Posso implementar algo parecido para a sua empresa. Diagn&oacute;stico gratuito, sem compromisso.</p>
+      <a class="cta-a" id="cta-a" href="https://example.com/form-diagnostico" target="_blank">&#9889; Quero algo parecido</a>
+    </div>
+  </div>
+
+  <!-- ── NEWSLETTER ───────────────────────────────────────────────────────── -->
+  <div class="nl-wrap">
+    <div class="nl-box">
+      <div class="nl-eyebrow">Newsletter</div>
+      <div class="nl-t">Receba os pr&oacute;ximos conte&uacute;dos</div>
+      <p class="nl-s">Toda semana: automa&ccedil;&atilde;o, IA na pr&aacute;tica, sistemas reais e bastidores do que estou construindo na Lazy Labs. Sem spam &mdash; s&oacute; o que vale a pena.</p>
+      <div id="nl-form-area">
+        <div class="nl-fields">
+          <input class="nl-input" type="email" id="nl-email" placeholder="seu@email.com" autocomplete="email"
+            onkeydown="if(event.key==='Enter')subscribeNewsletter()">
+          <button class="nl-btn" id="nl-btn" onclick="subscribeNewsletter()">Inscrever &rarr;</button>
+        </div>
+        <label class="nl-check">
+          <input type="checkbox" id="nl-consent">
+          <span>Aceito receber e-mails, novidades e conte&uacute;dos da Lazy Labs. Pode cancelar a qualquer momento.</span>
+        </label>
+      </div>
+      <div class="nl-msg" id="nl-msg"></div>
+    </div>
+  </div>
+
+  <!-- ── COMMENTS ────────────────────────────────────────────────────────── -->
+  <div class="cm-wrap">
+
+    <!-- Header -->
+    <div class="cm-head">
+      <div class="cm-title-row">
+        <div class="cm-title">Coment&aacute;rios</div>
+        <div class="cm-badge" id="cm-badge" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="cm-form-box">
+      <!-- Mode toggle -->
+      <div class="cm-mode-tabs">
+        <button class="cm-tab active" id="cm-tab-anon" onclick="setCommentMode('anonymous')">
+          &#128100; An&ocirc;nimo
+        </button>
+        <button class="cm-tab" id="cm-tab-id" onclick="setCommentMode('identified')">
+          &#9679; Identificado
+        </button>
+      </div>
+
+      <!-- Anonymous fields -->
+      <div id="cm-f-anon">
+        <input class="cm-input" type="text" id="cm-nickname" placeholder="Seu apelido (opcional)"
+          maxlength="60" style="margin-bottom:12px">
+      </div>
+
+      <!-- Identified fields -->
+      <div id="cm-f-id" style="display:none">
+        <div class="cm-row">
+          <input class="cm-input" type="text" id="cm-name" placeholder="Seu nome" maxlength="100" style="flex:1">
+          <input class="cm-input" type="email" id="cm-email" placeholder="E-mail (n&atilde;o exibido)" maxlength="200" style="flex:1;min-width:160px">
+        </div>
+      </div>
+
+      <!-- Message -->
+      <textarea class="cm-input cm-textarea" id="cm-message"
+        placeholder="Escreva seu coment&aacute;rio... (Ctrl+Enter para publicar)"
+        maxlength="2000"
+        onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter')submitComment()"></textarea>
+
+      <!-- Footer row -->
+      <div class="cm-footer-row">
+        <span class="cm-hint" id="cm-hint">E-mail nunca &eacute; exibido publicamente</span>
+        <button class="cm-submit" id="cm-submit-btn" onclick="submitComment()">
+          Publicar &rarr;
+        </button>
+      </div>
+      <div class="cm-form-msg" id="cm-form-msg"></div>
+    </div>
+
+    <!-- Comments list -->
+    <div class="cm-list" id="cm-list">
+      <div class="cm-loading-row">Carregando coment&aacute;rios...</div>
+    </div>
+
+  </div><!-- /cm-wrap -->
+
+  <!-- Related articles -->
+  <div class="rel-wrap" id="rel-wrap" style="display:none">
+    <div class="sec-lbl">Leia tamb&eacute;m</div>
+    <div class="rel-grid" id="rel-grid"></div>
+  </div>
+
+</div><!-- /art-root -->
+
+<footer>
+  <div class="ft">
+    <div class="fl"><span>[</span>LAZY<span> LABS]</span></div>
+    <div class="fll">
+      <a href="https://blog.example.com">Blog</a>
+      <a href="https://example.com">Site</a>
+      <a href="https://blog.example.com/?categoria=projetos">Projetos</a>
+      <a href="https://example.com/form-diagnostico">Fazer diagnóstico</a>
+    </div>
+    <div class="fc">&copy; 2025 Lazy Labs &mdash; Engenharia de IA &amp; Automa&ccedil;&atilde;o</div>
+  </div>
+</footer>
+
+<script>
+/* ────────────────────────────────────────────────────────────────────────────
+   SQL PARA CRIAR A TABELA post_comments NO SUPABASE
+   Execute no SQL Editor do Supabase antes de usar os comentários:
+
+   CREATE TABLE IF NOT EXISTS public.post_comments (
+     id          uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+     post_slug   text NOT NULL,
+     mode        text NOT NULL DEFAULT 'anonymous'
+                   CHECK (mode IN ('anonymous','identified')),
+     nickname    text DEFAULT '',
+     name        text DEFAULT '',
+     email       text DEFAULT '',
+     message     text NOT NULL,
+     status      text NOT NULL DEFAULT 'approved'
+                   CHECK (status IN ('pending','approved','rejected')),
+     created_at  timestamptz DEFAULT now(),
+     updated_at  timestamptz DEFAULT now()
+   );
+
+   ALTER TABLE public.post_comments ENABLE ROW LEVEL SECURITY;
+
+   -- Qualquer pessoa pode inserir
+   CREATE POLICY "comments_public_insert"
+     ON public.post_comments FOR INSERT WITH CHECK (true);
+
+   -- Só exibe comentários aprovados publicamente
+   CREATE POLICY "comments_public_select"
+     ON public.post_comments FOR SELECT USING (status = 'approved');
+
+   -- Index para performance
+   CREATE INDEX IF NOT EXISTS idx_post_comments_slug_status
+     ON public.post_comments (post_slug, status);
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Supabase client ─────────────────────────────────────────────────────── */
+const {createClient} = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ── Utilities ───────────────────────────────────────────────────────────── */
+function getSlug(){
+  const p = location.pathname.replace(/\/$/,"").split("/");
+  const s = p[p.length-1];
+  return (s && s !== "artigo") ? s : null;
+}
+function fmtDate(iso){
+  if(!iso) return "";
+  return new Date(iso).toLocaleDateString("pt-BR",{day:"2-digit",month:"short",year:"numeric"});
+}
+function fmtRelDate(iso){
+  if(!iso) return "";
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff/60000);
+  if(m < 1)  return "agora mesmo";
+  if(m < 60) return "h\u00E1 "+m+" min";
+  const h = Math.floor(m/60);
+  if(h < 24) return "h\u00E1 "+h+"h";
+  const d = Math.floor(h/24);
+  if(d < 7)  return "h\u00E1 "+d+" dia"+(d>1?"s":"");
+  return new Date(iso).toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
+}
+function show(id){const e=document.getElementById(id);if(e)e.style.display="block"}
+function hide(id){const e=document.getElementById(id);if(e)e.style.display="none"}
+function setMeta(sel,val){if(!val)return;const el=document.querySelector(sel);if(el)el.setAttribute("content",val)}
+function esc(s){
+  return String(s||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+function isValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)}
+
+/* ── Audio player ────────────────────────────────────────────────────────── */
+function buildAudioPlayer(audioUrl) {
+  var container = document.getElementById("audio-player-container");
+  if (!container) return;
+  var url = (audioUrl || "").trim();
+
+  if (url.startsWith("<iframe")) {
+    var wrap = document.createElement("div");
+    wrap.className = "audio-embed";
+    var header = '<div class="audio-embed-header">'
+      + '<span class="audio-icon">&#127908;</span>'
+      + '<div><div class="audio-embed-label">Vers\u00E3o em \u00E1udio</div>'
+      + '<div class="audio-embed-sub">Ou\u00E7a este artigo</div></div></div>';
+    var iframeCode = url
+      .replace(/width="[^"]*"/,  'width="100%"')
+      .replace(/height="[^"]*"/, 'height="166"')
+      .replace(/frameborder="[^"]*"/, 'frameborder="no"');
+    wrap.innerHTML = header + iframeCode;
+    container.appendChild(wrap);
+    return;
+  }
+
+  if (url.includes("soundcloud.com") && !url.includes("w.soundcloud.com")) {
+    var wrap = document.createElement("div");
+    wrap.className = "audio-embed";
+    var embedUrl = "https://w.soundcloud.com/player/"
+      + "?url=" + encodeURIComponent(url)
+      + "&color=%23a855f7&auto_play=false&hide_related=true"
+      + "&show_comments=false&show_user=true&show_reposts=false"
+      + "&show_teaser=false&visual=true";
+    var header = '<div class="audio-embed-header">'
+      + '<span class="audio-icon">&#127908;</span>'
+      + '<div><div class="audio-embed-label">Vers\u00E3o em \u00E1udio</div>'
+      + '<div class="audio-embed-sub">Ou\u00E7a este artigo no SoundCloud</div></div></div>';
+    wrap.innerHTML = header
+      + '<iframe width="100%" height="300" scrolling="no" frameborder="no" '
+      + 'allow="autoplay" loading="lazy" src="' + embedUrl + '"></iframe>';
+    container.appendChild(wrap);
+    return;
+  }
+
+  if (url.includes("drive.google.com")) {
+    var fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (fileIdMatch) {
+      var previewUrl = "https://drive.google.com/file/d/" + fileIdMatch[1] + "/preview";
+      var wrap = document.createElement("div");
+      wrap.className = "audio-embed";
+      var header = '<div class="audio-embed-header">'
+        + '<span class="audio-icon">&#127908;</span>'
+        + '<div><div class="audio-embed-label">Vers\u00E3o em \u00E1udio</div>'
+        + '<div class="audio-embed-sub">Ou\u00E7a este artigo</div></div></div>';
+      wrap.innerHTML = header
+        + '<iframe src="' + previewUrl + '" width="100%" height="80" '
+        + 'allow="autoplay" loading="lazy" frameborder="0"></iframe>';
+      container.appendChild(wrap);
+      return;
+    }
+  }
+
+  var wrap = document.createElement("div");
+  wrap.className = "audio-box";
+  wrap.innerHTML = '<div class="audio-icon">&#127908;</div>'
+    + '<div class="audio-info"><div class="audio-label">Vers\u00E3o em \u00E1udio</div>'
+    + '<div class="audio-sub">Ou\u00E7a este artigo</div></div>'
+    + '<audio controls preload="none" style="flex:1;max-width:100%">'
+    + '<source src="' + url + '">'
+    + 'Seu navegador n\u00E3o suporta o player de \u00E1udio.</audio>';
+  container.appendChild(wrap);
+}
+
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
+function ytEmbed(url){
+  if(!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?\/]+)/);
+  return m ? "https://www.youtube.com/embed/"+m[1] : null;
+}
+function sanitize(html){
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,"")
+    .replace(/\bon\w+\s*=/gi,"data-x=");
+}
+
+/* ── Render article ──────────────────────────────────────────────────────── */
+function render(p){
+  document.title = (p.seo_title||p.title) + " \u2014 Lazy Labs Blog";
+  setMeta("meta[name=\"description\"]", p.seo_description||p.excerpt||"");
+  setMeta("meta[property=\"og:title\"]", p.title);
+  setMeta("meta[property=\"og:description\"]", p.excerpt||"");
+  setMeta("meta[property=\"og:image\"]", p.cover_url||"https://blog.example.com/og-default.png");
+  setMeta("meta[property=\"og:url\"]", location.href);
+  const cn = document.querySelector("link[rel=\"canonical\"]");
+  if(cn) cn.href = location.href;
+
+  document.getElementById("bc-cat").textContent = p.category||"Artigo";
+  document.getElementById("art-cat").textContent = p.category||"Artigo";
+  document.getElementById("art-title").textContent = p.title;
+  const ex = document.getElementById("art-excerpt");
+  if(p.excerpt){ex.textContent = p.excerpt}else{ex.style.display="none"}
+  document.getElementById("m-author").textContent = p.author_name||"Lazy Labs";
+  document.getElementById("m-date").textContent = fmtDate(p.published_at);
+  document.getElementById("m-read").textContent = "\u23F1 "+(p.reading_time||5)+" min";
+  const vEl = document.getElementById("m-views");
+  if(p.view_count>0){vEl.textContent="\uD83D\uDC41 "+p.view_count}
+  else{vEl.style.display="none";document.getElementById("m-vsep").style.display="none"}
+
+  const tg = document.getElementById("art-tags");
+  if(p.tags&&p.tags.length){
+    tg.innerHTML = p.tags.map(t=>"<span class=\"art-tag\">"+t+"</span>").join("");
+  }else{tg.style.display="none"}
+
+  const cv = document.getElementById("art-cover");
+  if(p.cover_url){
+    cv.innerHTML = "<img class=\"cover-img\" src=\""+p.cover_url+"\" alt=\""+p.title+"\" loading=\"lazy\">";
+  }else{
+    cv.innerHTML = "<div class=\"cover-ph\">\uD83D\uDCDD</div>";
+  }
+
+  if(p.audio_url){buildAudioPlayer(p.audio_url);show("art-audio")}
+
+  let html = p.content||"<p>Conte\u00FAdo n\u00E3o dispon\u00EDvel.</p>";
+  html = sanitize(html);
+  if(p.video_url&&!html.includes("<iframe")){
+    const e = ytEmbed(p.video_url)||p.video_url;
+    html += "<div class=\"vid-wrap\"><iframe src=\""+e+"\" allowfullscreen loading=\"lazy\"></iframe></div>";
+  }
+  document.getElementById("art-body").innerHTML = html;
+  buildTOC();
+
+  const pl = document.getElementById("proj-links");const ls=[];
+  if(p.github_url) ls.push("<a href=\""+p.github_url+"\" target=\"_blank\" class=\"plink plink-gh\">\uD83D\uDCC2 Ver no GitHub</a>");
+  if(p.project_url) ls.push("<a href=\""+p.project_url+"\" target=\"_blank\" class=\"plink plink-demo\">\uD83D\uDE80 Ver ao vivo</a>");
+  if(ls.length){pl.innerHTML=ls.join("")}else{pl.style.display="none"}
+
+  if(p.cta_label){
+    const ca = document.getElementById("cta-a");
+    ca.textContent = p.cta_label;
+    ca.href = p.cta_url||"https://example.com/form-diagnostico";
+  }
+
+  loadLikes(p.id);
+  const u = encodeURIComponent(location.href);
+  const t = encodeURIComponent(p.title);
+  document.getElementById("sh-tw").href  = "https://twitter.com/intent/tweet?text="+t+"&url="+u;
+  document.getElementById("sh-wpp").href = "https://wa.me/?text="+t+"%20"+u;
+
+  hide("st-loading");
+  show("art-root");
+  incViews(p.id);
+  loadRelated(p.id, p.category, p.slug);
+}
+
+/* ════════════════════════════════════════
+   POSTS RELACIONADOS (mesma categoria)
+   ════════════════════════════════════════ */
+async function loadRelated(postId, category, slug) {
+  try {
+    const wrap = document.getElementById('related-wrap');
+    const grid = document.getElementById('related-grid');
+    if (!wrap || !grid) return;
+    if (!category && !slug) { wrap.style.display = 'none'; return; }
+    let q = db.from('posts').select('id,title,slug,category,published_at,reading_time').eq('status','published').limit(4);
+    if (category) q = q.eq('category', category);
+    const r = await q.order('published_at', { ascending: false });
+    if (r.error || !r.data || r.data.length === 0) { wrap.style.display = 'none'; return; }
+    const list = r.data.filter(function (p) { return p.slug !== slug; }).slice(0, 3);
+    if (!list.length) { wrap.style.display = 'none'; return; }
+    grid.innerHTML = list.map(function (p) {
+      return '<a class="related-card" href="/artigo/' + p.slug + '">' +
+        '<span class="related-cat">' + (p.category || 'Artigo') + '</span>' +
+        '<div class="related-title">' + (p.title || '').replace(/</g, '&lt;') + '</div>' +
+        '<div class="related-meta">' + (p.reading_time || 5) + ' min de leitura</div>' +
+      '</a>';
+    }).join('');
+    wrap.style.display = 'block';
+  } catch (e) { /* silencioso */ }
+}
+
+/* ════════════════════════════════════════
+   TOC (Tabela de Conteudo) + scrollspy
+   ════════════════════════════════════════ */
+function buildTOC() {
+  try {
+    const body = document.getElementById('art-body');
+    const wrap = document.getElementById('toc-wrap');
+    const list = document.getElementById('toc-list');
+    if (!body || !wrap || !list) return;
+    // Coleta H2 do conteudo.
+    const hs = body.querySelectorAll('h2');
+    if (hs.length < 3) { wrap.style.display = 'none'; return; }
+    const items = [];
+    hs.forEach(function (h, i) {
+      const id = 'toc-h-' + i;
+      h.id = id;
+      const t = (h.textContent || '').trim();
+      items.push('<li><a href="#' + id + '" data-toc="' + id + '">' + t.replace(/</g, '&lt;') + '</a></li>');
+    });
+    list.innerHTML = items.join('');
+    wrap.style.display = 'block';
+
+    // Scrollspy: destaca o H2 visivel no momento.
+    function onScroll() {
+      var fromTop = window.scrollY + 120;
+      var current = '';
+      hs.forEach(function (h) {
+        if (h.offsetTop <= fromTop) current = h.id;
+      });
+      list.querySelectorAll('a').forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('data-toc') === current);
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Click com scroll suave + atualiza hash.
+    list.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var id = a.getAttribute('data-toc');
+        var t = document.getElementById(id);
+        if (t) {
+          window.scrollTo({ top: t.offsetTop - 80, behavior: 'smooth' });
+          history.replaceState(null, '', '#' + id);
+        }
+      });
+    });
+  } catch (e) { /* silencioso */ }
+}
+  loadComments(p.slug);   /* ← NEW */
+}
+
+/* ── Load article ────────────────────────────────────────────────────────── */
+async function loadArticle(){
+  const slug = getSlug();
+  if(!slug){location.replace("https://blog.example.com");return}
+  try{
+    const{data,error} = await db.from("posts").select("*").eq("slug",slug).eq("status","published").single();
+    if(error){
+      if(error.code==="PGRST116"){hide("st-loading");show("st-404");return}
+      throw error;
+    }
+    if(!data){hide("st-loading");show("st-404");return}
+    render(data);
+  }catch(err){
+    console.error("[Lazy Labs]",err);
+    hide("st-loading");
+    document.getElementById("err-msg").textContent = "Erro: "+(err.message||"verifique a conex\u00E3o.");
+    show("st-error");
+  }
+}
+
+/* ── View counter ────────────────────────────────────────────────────────── */
+async function incViews(id){
+  try{
+    const k="v_"+id;
+    if(sessionStorage.getItem(k)) return;
+    sessionStorage.setItem(k,"1");
+    const{data:p} = await db.from("posts").select("view_count").eq("id",id).single();
+    if(p) await db.from("posts").update({view_count:(p.view_count||0)+1}).eq("id",id);
+  }catch(_){}
+}
+
+/* ── Likes ───────────────────────────────────────────────────────────────── */
+async function loadLikes(id){
+  try{
+    const{data} = await db.from("posts").select("like_count").eq("id",id).single();
+    document.getElementById("like-n").textContent = data?.like_count||0;
+    if(localStorage.getItem("lk_"+id)) document.getElementById("like-btn").classList.add("liked");
+  }catch(_){}
+}
+async function toggleLike(){
+  const slug = getSlug();if(!slug) return;
+  try{
+    const{data:p} = await db.from("posts").select("id,like_count").eq("slug",slug).single();
+    if(!p) return;
+    const k="lk_"+p.id;const already=localStorage.getItem(k);
+    const n = Math.max(0,(p.like_count||0)+(already?-1:1));
+    await db.from("posts").update({like_count:n}).eq("id",p.id);
+    document.getElementById("like-n").textContent = n;
+    if(already){localStorage.removeItem(k);document.getElementById("like-btn").classList.remove("liked")}
+    else{localStorage.setItem(k,"1");document.getElementById("like-btn").classList.add("liked")}
+  }catch(_){}
+}
+
+/* ── Copy link ───────────────────────────────────────────────────────────── */
+function copyLink(){
+  navigator.clipboard.writeText(location.href).then(()=>{
+    const b = document.getElementById("sh-copy");
+    if(b){b.textContent="\u2705";setTimeout(()=>b.textContent="\uD83D\uDD17",2000)}
+  }).catch(()=>{});
+}
+
+/* ── Related articles ────────────────────────────────────────────────────── */
+async function loadRelated(id,cat){
+  try{
+    let q = db.from("posts").select("id,title,slug,category,published_at,reading_time")
+      .eq("status","published").neq("id",id).limit(3);
+    if(cat) q=q.eq("category",cat); else q=q.order("published_at",{ascending:false});
+    const{data} = await q;
+    if(!data||!data.length) return;
+    document.getElementById("rel-grid").innerHTML = data.map(p=>
+      "<a class=\"rel-card\" href=\"/artigo/"+p.slug+"\">"
+      +"<div class=\"rc-cat\">"+(p.category||"Artigo")+"</div>"
+      +"<div class=\"rc-t\">"+p.title+"</div>"
+      +"<div class=\"rc-m\">"+fmtDate(p.published_at)+" \u00B7 \u23F1 "+(p.reading_time||5)+" min</div>"
+      +"</a>"
+    ).join("");
+    show("rel-wrap");
+  }catch(_){}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NEWSLETTER
+══════════════════════════════════════════════════════════════════════════ */
+function nlMsg(type, text){
+  const el = document.getElementById("nl-msg");
+  el.className = "nl-msg " + type;
+  el.textContent = text;
+  el.style.display = "block";
+}
+
+async function subscribeNewsletter(){
+  const emailEl   = document.getElementById("nl-email");
+  const consentEl = document.getElementById("nl-consent");
+  const btn       = document.getElementById("nl-btn");
+  const email     = (emailEl.value||"").trim();
+
+  // Validations
+  if(!email || !isValidEmail(email)){
+    nlMsg("err", "Informe um e-mail v\u00E1lido.");
+    emailEl.focus();
+    return;
+  }
+  if(!consentEl.checked){
+    nlMsg("err", "Marque a caixa de consentimento para continuar.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Inscrevendo...";
+
+  try{
+    const slug = getSlug()||"blog";
+    const now  = new Date().toISOString();
+
+    const{error} = await db.from("newsletter_subscribers").insert({
+      email:        email,
+      first_name:   "",
+      last_name:    "",
+      nickname:     "",
+      source:       "blog_" + slug,
+      consent:      true,
+      status:       "active",
+      subscribed_at: now,
+      updated_at:   now,
+      ip_hash:      ""
+    });
+
+    if(error){
+      // Duplicate email → unique violation
+      if(error.code === "23505" || (error.message && error.message.toLowerCase().includes("duplicate"))){
+        document.getElementById("nl-form-area").style.display = "none";
+        nlMsg("info", "\uD83D\uDC4D Voc\u00EA j\u00E1 est\u00E1 inscrito na newsletter!");
+      }else{
+        throw error;
+      }
+    }else{
+      document.getElementById("nl-form-area").style.display = "none";
+      nlMsg("ok", "\uD83C\uDF89 Inscrito! Voc\u00EA vai receber os pr\u00F3ximos conte\u00FAdos da Lazy Labs.");
+    }
+  }catch(err){
+    console.error("[Lazy Labs Newsletter]", err);
+    nlMsg("err", "Erro ao inscrever. Tente novamente em instantes.");
+    btn.disabled = false;
+    btn.textContent = "Inscrever \u2192";
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COMMENTS
+══════════════════════════════════════════════════════════════════════════ */
+var _cmMode = "anonymous";
+var _cmSlug = "";
+
+/* Toggle comment mode (anonymous / identified) */
+function setCommentMode(mode){
+  _cmMode = mode;
+  document.getElementById("cm-tab-anon").className = "cm-tab" + (mode==="anonymous" ? " active" : "");
+  document.getElementById("cm-tab-id").className   = "cm-tab" + (mode==="identified" ? " active" : "");
+  document.getElementById("cm-f-anon").style.display = mode==="anonymous" ? "" : "none";
+  document.getElementById("cm-f-id").style.display   = mode==="identified" ? "" : "none";
+  document.getElementById("cm-hint").textContent =
+    mode==="identified"
+      ? "E-mail nunca \u00E9 exibido publicamente"
+      : "Coment\u00E1rio an\u00F4nimo \u2014 nenhum dado pessoal necess\u00E1rio";
+}
+
+/* Show inline form feedback */
+function cmFormMsg(type, text){
+  const el = document.getElementById("cm-form-msg");
+  el.className = "cm-form-msg " + type;
+  el.textContent = text;
+  el.style.display = "block";
+  setTimeout(()=>{ el.style.display = "none"; }, 5000);
+}
+
+/* Get initials for avatar */
+function initials(name){
+  const parts = (name||"?").trim().split(/\s+/);
+  return parts.length >= 2
+    ? (parts[0][0]+parts[parts.length-1][0]).toUpperCase()
+    : parts[0].slice(0,2).toUpperCase();
+}
+
+/* Render comments list */
+function renderComments(comments){
+  const list  = document.getElementById("cm-list");
+  const badge = document.getElementById("cm-badge");
+
+  if(!comments||!comments.length){
+    list.innerHTML = "<div class=\"cm-empty\">Nenhum coment\u00E1rio ainda. Seja o primeiro!</div>";
+    badge.style.display = "none";
+    return;
+  }
+
+  const n = comments.length;
+  badge.textContent = n + (n===1 ? " coment\u00E1rio" : " coment\u00E1rios");
+  badge.style.display = "";
+
+  list.innerHTML = comments.map(function(c){
+    const displayName = esc(c.nickname||c.name||"An\u00F4nimo");
+    const isAnon = !c.nickname && !c.name;
+    const avatarInitials = initials(c.nickname||c.name||"A");
+    const msgHtml = esc(c.message||"").replace(/\n/g,"<br>");
+    return "<div class=\"cm-item\">"
+      + "<div class=\"cm-item-head\">"
+      + "<div class=\"cm-author-wrap\">"
+      + "<div class=\"cm-avatar\">"+avatarInitials+"</div>"
+      + "<span class=\"cm-author"+(isAnon?" anon":"")+"\">"+displayName+"</span>"
+      + "</div>"
+      + "<span class=\"cm-date\">"+fmtRelDate(c.created_at)+"</span>"
+      + "</div>"
+      + "<div class=\"cm-text\">"+msgHtml+"</div>"
+      + "</div>";
+  }).join("");
+}
+
+/* Load comments for a given slug */
+async function loadComments(slug){
+  _cmSlug = slug;
+  const list = document.getElementById("cm-list");
+  list.innerHTML = "<div class=\"cm-loading-row\">Carregando coment\u00E1rios...</div>";
+  try{
+    const{data,error} = await db
+      .from("post_comments")
+      .select("nickname,name,message,created_at")
+      .eq("post_slug", slug)
+      .eq("status", "approved")
+      .order("created_at", {ascending:true});
+    if(error) throw error;
+    renderComments(data);
+  }catch(err){
+    console.error("[Lazy Labs Comments]", err);
+    list.innerHTML = "<div class=\"cm-empty\">Erro ao carregar coment\u00E1rios.</div>";
+  }
+}
+
+/* Submit a new comment */
+async function submitComment(){
+  const message = (document.getElementById("cm-message").value||"").trim();
+  const btn = document.getElementById("cm-submit-btn");
+
+  if(!message || message.length < 3){
+    cmFormMsg("err", "Escreva uma mensagem antes de publicar.");
+    return;
+  }
+  if(message.length > 2000){
+    cmFormMsg("err", "Mensagem muito longa (m\u00E1x. 2000 caracteres).");
+    return;
+  }
+
+  const now = new Date().toISOString();
+  const payload = {
+    post_slug:  _cmSlug,
+    mode:       _cmMode,
+    message:    message,
+    status:     "approved",      // muda para "pending" quando ativar moderação
+    created_at: now,
+    updated_at: now
+  };
+
+  if(_cmMode === "anonymous"){
+    const nick = (document.getElementById("cm-nickname").value||"").trim().slice(0,60);
+    payload.nickname = nick || "An\u00F4nimo";
+    payload.name     = "";
+    payload.email    = "";
+  }else{
+    const name  = (document.getElementById("cm-name").value||"").trim().slice(0,100);
+    const email = (document.getElementById("cm-email").value||"").trim().slice(0,200);
+    if(!name){cmFormMsg("err","Informe seu nome.");return}
+    if(email && !isValidEmail(email)){cmFormMsg("err","Informe um e-mail v\u00E1lido ou deixe em branco.");return}
+    payload.name     = name;
+    payload.email    = email;
+    payload.nickname = "";
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Publicando...";
+
+  try{
+    const{error} = await db.from("post_comments").insert(payload);
+    if(error) throw error;
+
+    // Clear form
+    document.getElementById("cm-message").value  = "";
+    document.getElementById("cm-nickname").value = "";
+    document.getElementById("cm-name").value     = "";
+    document.getElementById("cm-email").value    = "";
+
+    cmFormMsg("ok", "\u2705 Coment\u00E1rio publicado!");
+    loadComments(_cmSlug);   // reload to show new comment
+  }catch(err){
+    console.error("[Lazy Labs Comments]", err);
+    cmFormMsg("err", "Erro ao publicar. Tente novamente.");
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Publicar \u2192";
+}
+
+/* ── Kick off ────────────────────────────────────────────────────────────── */
+loadArticle();
+</script>
+</body>
+</html>

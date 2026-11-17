@@ -1,0 +1,14 @@
+.article-cta-block{margin:30px 0;display:flex;justify-content:flex-start;align-items:center}
+.article-cta{--cta:#00e5f3;--cta-ink:#031015;position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:11px;max-width:100%;min-height:48px;padding:12px 22px;border:1px solid color-mix(in srgb,var(--cta),white 18%);border-radius:9px;background:var(--cta);color:var(--cta-ink)!important;font:700 13px/1.25 'JetBrains Mono',monospace;text-align:center;text-decoration:none!important;overflow:hidden;box-shadow:0 6px 0 color-mix(in srgb,var(--cta),black 57%),0 12px 24px color-mix(in srgb,var(--cta),transparent 81%);transform:translateY(0);transition:transform .18s,box-shadow .18s,filter .18s}
+.article-cta::before{content:'↗';font:700 20px/1 'JetBrains Mono',monospace;flex:none}
+.article-cta-download::before{content:'↓'}
+.article-cta-github::before{content:'';width:20px;height:20px;background:currentColor;mask:url('/assets/git-branch.svg') center/contain no-repeat}
+.article-cta:hover{color:var(--cta-ink)!important;transform:translateY(-3px);box-shadow:0 9px 0 color-mix(in srgb,var(--cta),black 57%),0 18px 30px color-mix(in srgb,var(--cta),transparent 75%);filter:brightness(1.08)}
+.article-cta:active{transform:translateY(4px);box-shadow:0 2px 0 color-mix(in srgb,var(--cta),black 57%)}
+.article-cta:focus-visible{outline:2px solid white;outline-offset:4px}
+.article-cta.is-opening{pointer-events:none;filter:saturate(.85)}
+.article-cta.is-opening::after{content:'';position:absolute;bottom:0;left:0;height:4px;width:0;background:rgba(0,0,0,.62);animation:article-cta-progress 5s linear forwards}
+.article-cta-purple{--cta:#a855f7;--cta-ink:#100817}.article-cta-pink{--cta:#ff65bb;--cta-ink:#1d0814}.article-cta-yellow{--cta:#f6dc35;--cta-ink:#1b1704}.article-cta-green{--cta:#55e69b;--cta-ink:#071710}
+@keyframes article-cta-progress{to{width:100%}}
+@media(max-width:600px){.article-cta-block{justify-content:stretch}.article-cta{width:100%}}
+@media(prefers-reduced-motion:reduce){.article-cta{transition:none}.article-cta.is-opening::after{animation:none;width:100%}}

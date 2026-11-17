@@ -1,0 +1,13 @@
+{
+  "name": "lazylabs-publicador",
+  "description": "Publicador de Reels do Instagram na nuvem (Cloud Tasks) — agenda sem depender do PC ligado",
+  "engines": {
+    "node": "22"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "firebase-functions": "^7.4.0"
+  },
+  "private": true
+}

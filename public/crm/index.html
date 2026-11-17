@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Lazy Labs CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/crm/styles.css">
+</head>
+<body>
+
+  <!-- ========== AUTH OVERLAY ========== -->
+  <div class="auth-ov" id="authOverlay">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-mark" id="authLogo">LL</div>
+        <div class="brand-txt"><b id="authBrandName">Lazy Labs CRM</b><span id="authTagline">IA &amp; Automação</span></div>
+      </div>
+      <div id="authMsg" class="auth-msg"></div>
+
+      <!-- login -->
+      <div id="authLogin">
+        <div class="auth-title">Entrar</div>
+        <div class="auth-sub">Acesse o painel comercial.</div>
+        <div class="field"><label>E-mail</label><input type="email" id="loginEmail" autocomplete="username" placeholder="voce@example.com"></div>
+        <div class="field"><label>Senha</label><input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••"></div>
+        <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:6px">Entrar</button>
+        <div class="auth-link" data-auth="reset">Esqueci minha senha</div>
+      </div>
+
+      <!-- reset -->
+      <div id="authReset" style="display:none">
+        <div class="auth-title">Redefinir senha</div>
+        <div class="auth-sub">Enviaremos um código para o seu e-mail.</div>
+        <div class="field"><label>E-mail</label><input type="email" id="resetEmail" placeholder="voce@example.com"></div>
+        <div id="resetStep2" style="display:none">
+          <div class="field"><label>Código (6 dígitos)</label><input type="text" id="resetCode" inputmode="numeric" maxlength="6"></div>
+          <div class="field"><label>Nova senha</label><input type="password" id="resetNew" placeholder="mínimo 8 caracteres"></div>
+        </div>
+        <button class="btn btn-primary" id="resetBtn" style="width:100%;margin-top:6px">Enviar código</button>
+        <div class="auth-link" data-auth="login">Voltar ao login</div>
+      </div>
+
+      <!-- setup (1º acesso) -->
+      <div id="authSetup" style="display:none">
+        <div class="auth-title">Configurar CRM</div>
+        <div class="auth-sub">Crie a conta de administrador para começar.</div>
+        <div class="field"><label>Seu nome</label><input type="text" id="setupNome" placeholder="Equipe do Blog"></div>
+        <div class="field"><label>E-mail</label><input type="email" id="setupEmail" placeholder="voce@example.com"></div>
+        <div class="field"><label>Senha</label><input type="password" id="setupPass" placeholder="mínimo 8 caracteres"></div>
+        <button class="btn btn-primary" id="setupBtn" style="width:100%;margin-top:6px">Criar conta admin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== APP SHELL ========== -->
+  <div class="app" id="appRoot" style="display:none">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" id="sidebarLogoMark">LL</div>
+        <div class="brand-txt"><b id="brandName">Lazy Labs CRM</b><span id="brandTagline">IA &amp; Automação</span></div>
+      </div>
+
+      <div class="nav-sec">Operação</div>
+      <button class="nav-btn active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard</button>
+      <button class="nav-btn" data-page="leads">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        Leads</button>
+      <button class="nav-btn" data-page="pipeline">
+        <svg viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="21"/><rect x="3" y="6" width="6" height="6" rx="1"/><line x1="18" y1="3" x2="18" y2="21"/><rect x="15" y="9" width="6" height="6" rx="1"/></svg>
+        Pipeline</button>
+
+      <div class="nav-sec" id="adminSec" style="display:none">Administração</div>
+      <button class="nav-btn" data-page="settings" id="navSettings" style="display:none">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Configurações</button>
+
+      <div class="sidebar-foot">
+        <div class="user-chip" id="userChip">
+          <div class="user-av" id="userAv">D</div>
+          <div style="flex:1;min-width:0">
+            <b id="userName">—</b><span id="userRole">—</span>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--tx3)"><path d="M16 17l5-5-5-5M21 12H9M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <button class="menu-toggle" id="menuToggle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div style="flex:1">
+          <div class="page-title" id="topTitle">Dashboard</div>
+          <div class="page-sub" id="topSub">Visão geral do funil comercial</div>
+        </div>
+        <button class="btn btn-primary" id="primaryAction" style="display:none"></button>
+      </div>
+
+      <section class="page active" id="page-dashboard"></section>
+      <section class="page" id="page-leads"></section>
+      <section class="page" id="page-pipeline"></section>
+      <section class="page" id="page-settings"></section>
+    </main>
+  </div>
+
+  <!-- drawer + scrim + toast -->
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-h"><h3 id="drawerTitle">—</h3><button class="x-btn" id="drawerClose">×</button></div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot" id="drawerFoot"></div>
+  </aside>
+  <div class="toast" id="toast"></div>
+
+  <script src="/crm/app.js"></script>
+</body>
+</html>

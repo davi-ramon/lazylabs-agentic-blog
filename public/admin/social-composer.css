@@ -1,0 +1,15 @@
+.social-composer-help{color:var(--mt2);font-size:13px;line-height:1.6;margin:0 0 16px}
+.social-composer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.social-composer-message{min-height:18px;color:var(--cy);font:11px var(--fm);margin-bottom:10px}
+.social-composer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.social-composer-item{background:rgba(0,0,0,.21);border:1px solid rgba(0,240,255,.13);border-radius:10px;padding:14px;min-width:0}
+.social-composer-item:first-child{grid-column:1/-1;border-color:rgba(0,240,255,.3)}
+.social-composer-item label{display:flex;justify-content:space-between;gap:10px;color:var(--cy);font:700 12px var(--fm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.social-composer-item label span{color:var(--mt2);font-weight:400}
+.social-composer-tip{color:var(--mt2);font-size:12px;line-height:1.5;min-height:35px;margin-bottom:9px}
+.social-composer-item textarea{width:100%;min-height:92px;resize:vertical;line-height:1.55;font-size:13px;margin-bottom:8px}
+.social-composer-item:first-child textarea{min-height:210px}
+.social-composer-item select{width:100%;font-size:12px}
+.social-composer-approve{display:flex;align-items:flex-start;gap:9px;margin-top:18px;color:var(--tx);font-size:13px;line-height:1.5;cursor:pointer}
+.social-composer-approve input{accent-color:var(--cy);margin-top:3px}
+@media(max-width:760px){.social-composer-grid{grid-template-columns:1fr}.social-composer-item:first-child{grid-column:auto}}

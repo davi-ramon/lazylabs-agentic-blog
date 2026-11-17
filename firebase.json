@@ -1,0 +1,361 @@
+{
+  "hosting": {
+	"site": "your-blog",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+	{
+	  "source": "/api/meta/webhook",
+	  "function": { "functionId": "metaWebhook", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/api/meta/automations",
+	  "function": { "functionId": "metaAutomations", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/feed",
+	  "destination": "/feed/index.html"
+	},
+	{
+	  "source": "/favoritos",
+	  "destination": "/favoritos/index.html"
+	},
+	{
+	  "source": "/produto/**",
+	  "run": { "serviceId": "products", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/api/products/**",
+	  "run": { "serviceId": "products", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/en/artigo/**",
+	  "run": { "serviceId": "artigo", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/es/artigo/**",
+	  "run": { "serviceId": "artigo", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/fr/artigo/**",
+	  "run": { "serviceId": "artigo", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/de/artigo/**",
+	  "run": { "serviceId": "artigo", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/artigo/**",
+	  "run": {
+		"serviceId": "artigo",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/sitemap.xml",
+	  "run": {
+		"serviceId": "sitemap",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/rss.xml",
+	  "run": {
+		"serviceId": "rss",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/autor/**",
+	  "run": {
+		"serviceId": "autorpages",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/colaborar/**",
+	  "run": {
+		"serviceId": "autorpages",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/authors/**",
+	  "run": {
+		"serviceId": "authors",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/linkedin/**",
+	  "run": {
+		"serviceId": "linkedin",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/campaigns/**",
+	  "run": {
+		"serviceId": "campaigns",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/bio/**",
+	  "run": {
+		"serviceId": "bio",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/form/**",
+	  "run": {
+		"serviceId": "form",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/crm/**",
+	  "run": {
+		"serviceId": "crm",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/crm",
+	  "run": {
+		"serviceId": "crm",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/media/blog-video/**",
+	  "run": {
+		"serviceId": "posts",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/media/blog-content/**",
+	  "run": {
+		"serviceId": "posts",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/posts/**",
+	  "run": {
+		"serviceId": "posts",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/reader/**",
+	  "run": { "serviceId": "reader", "region": "southamerica-east1" }
+	},
+	{
+	  "source": "/api/blogs/**",
+	  "run": {
+		"serviceId": "blogs",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/transcribe",
+	  "run": {
+		"serviceId": "transcribe",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/transcribe/**",
+	  "run": {
+		"serviceId": "transcribe",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/whatsapp/**",
+	  "run": {
+		"serviceId": "whatsapp",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/whatsapp",
+	  "run": {
+		"serviceId": "whatsapp",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/social/**",
+	  "run": {
+		"serviceId": "social",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/social",
+	  "run": {
+		"serviceId": "social",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/davi/**",
+	  "run": {
+		"serviceId": "davi",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/davi",
+	  "run": {
+		"serviceId": "davi",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/agent/**",
+	  "run": {
+		"serviceId": "agent",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/agent",
+	  "run": {
+		"serviceId": "agent",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/v1/**",
+	  "run": {
+		"serviceId": "admin",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/admin/**",
+	  "run": {
+		"serviceId": "admin",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/devops/**",
+	  "run": {
+		"serviceId": "devops",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/migrate",
+	  "run": {
+		"serviceId": "migrate",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api",
+	  "run": {
+		"serviceId": "admin",
+		"region": "southamerica-east1"
+	  }
+	},
+	{
+	  "source": "/api/**",
+	  "run": {
+		"serviceId": "admin",
+		"region": "southamerica-east1"
+	  }
+	},
+      {
+        "source": "/admin",
+        "destination": "/admin/index.html"
+      },
+      {
+        "source": "/admin/**",
+        "destination": "/admin/index.html"
+      },
+      {
+        "source": "/crm",
+        "destination": "/crm/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|woff2|woff|ttf)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000" }
+        ]
+      },
+      {
+        "source": "/admin",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "/admin/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "/crm{,/**}",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+        ]
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git"
+      ]
+    },
+    {
+      "source": "publicador",
+      "codebase": "publicador",
+      "ignore": [
+        "node_modules",
+        ".git"
+      ]
+    }
+  ],
+  "firestore": {
+    "indexes": "firestore.indexes.json",
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

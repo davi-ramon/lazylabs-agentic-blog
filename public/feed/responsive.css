@@ -1,0 +1,47 @@
+/* Feed layouts: wide desktop, tablet, phone, compact phone. */
+.feed-card{transition:border-color .2s,transform .2s;cursor:pointer}
+.feed-card:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.feed-cover:focus-visible,.feed-title:focus-visible{outline:2px solid var(--cyan);outline-offset:-3px}
+@media(min-width:1600px){
+  .layout{max-width:1640px;grid-template-columns:270px minmax(0,830px) 270px;gap:34px}
+  .topbar-inner{max-width:1640px}
+}
+@media(min-width:761px) and (max-width:1100px){
+  .layout{grid-template-columns:210px minmax(0,1fr);gap:18px;padding:24px 20px 70px}
+  .layout.sidebar-small{grid-template-columns:70px minmax(0,1fr)}
+  .sidebar{top:92px}
+  .feed-cover{aspect-ratio:16/9}
+  .feed-card-body{padding:20px}
+}
+@media(max-width:760px){
+  html,body{max-width:100%;overflow-x:clip}
+  .topbar-inner{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .layout,.layout.sidebar-small{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));padding-bottom:max(60px,env(safe-area-inset-bottom))}
+  .sidebar,.sidebar-small .sidebar{border-radius:12px;margin-bottom:14px}
+  .intro h1{font-size:clamp(22px,5.2vw,30px)}
+  .controls{gap:10px}.search input{min-height:44px}.sort{min-height:40px}
+  .feed-card,.loading-card{border-radius:14px}
+  .feed-card-top{padding:14px 16px 12px}.feed-card-body{padding:17px 16px}
+  .feed-cover{aspect-ratio:16/10}
+  .feed-title{font-size:clamp(17px,4.3vw,21px);overflow-wrap:anywhere}
+  .feed-actions a,.feed-actions button{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  .feed-actions .read{margin-left:auto}
+  .topic-link{min-height:42px}
+}
+@media(max-width:600px){
+  .topbar-inner{gap:10px}.brand{font-size:13px}.brand small{font-size:8px;margin-left:3px;padding:3px 5px}
+  .topbar nav{gap:12px}.topbar nav a{font-size:10px}
+  .personalization{padding:14px;gap:10px}.personalization strong{font-size:12px}
+  .feed-card-top{gap:9px}.avatar{width:34px;height:34px}
+  .interest-pill{max-width:100px;overflow:hidden;text-overflow:ellipsis}
+  .feed-meta{gap:8px 12px}.feed-actions{gap:7px}
+}
+@media(max-width:400px){
+  .topbar nav a:first-child{display:none}
+  .brand{font-size:12px}.brand small{display:none}
+  .feed-cover{aspect-ratio:4/3}.feed-card-body{padding:15px 14px}
+  .feed-title{font-size:17px}.feed-excerpt{font-size:13px}
+  .feed-actions .read{width:100%;margin-left:0}
+  .view-controls{width:100%}.sort{flex:1}
+}
+@media(prefers-reduced-motion:reduce){.feed-card,.feed-cover img{transition:none}.feed-cover:hover img{transform:none}}

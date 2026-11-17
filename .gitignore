@@ -1,0 +1,30 @@
+# Credentials and machine-specific configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+.firebaserc
+site.config.local.json
+*service-account*.json
+*service_account*.json
+*credentials*.json
+*.pem
+*.p12
+*.pfx
+*.key
+
+# Dependencies, caches and runtime output
+node_modules/
+.firebase/
+coverage/
+.nyc_output/
+logs/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Local exports and generated credentials
+public/*indexnow*.txt
+public/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*.txt
+*.local

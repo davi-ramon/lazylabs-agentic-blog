@@ -1,0 +1,93 @@
+/* Lazy Labs button system: the raised cyan action from the comment composer. */
+body :is(button, a.nav-cta, a.n-cta, a.btn-p, a.btn-g, a.btn-w,
+  a.proj-btn, a.btn-modal-p, a.btn-modal-s, a.pc-btn-sec, a.btn-home,
+  a.btn-wpp, a.btn-disq-wpp, a.btn-disq-back, a.cta, a.state-btn,
+  a.st-btn, a.cta-a, a.plink, a.back, a.ficon, a.soc, a.lnk, a.s-btn) {
+  --ll-depth-edge: #173547;
+  --ll-depth-glow: rgba(0, 240, 255, .12);
+  border-radius: 8px;
+  box-shadow: 0 5px 0 var(--ll-depth-edge),
+              0 12px 25px var(--ll-depth-glow),
+              inset 0 1px 0 rgba(255, 255, 255, .12);
+  transform: translateY(0);
+  transition: transform .18s cubic-bezier(.2, .8, .2, 1),
+              box-shadow .18s ease, background-color .18s ease,
+              border-color .18s ease, color .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body :is(button, a.nav-cta, a.n-cta, a.btn-p, a.btn-g, a.btn-w,
+  a.proj-btn, a.btn-modal-p, a.btn-modal-s, a.pc-btn-sec, a.btn-home,
+  a.btn-wpp, a.btn-disq-wpp, a.btn-disq-back, a.cta, a.state-btn,
+  a.st-btn, a.cta-a, a.plink, a.back, a.ficon, a.soc, a.lnk, a.s-btn):hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--ll-depth-edge),
+              0 16px 30px var(--ll-depth-glow),
+              inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+body :is(button, a.nav-cta, a.n-cta, a.btn-p, a.btn-g, a.btn-w,
+  a.proj-btn, a.btn-modal-p, a.btn-modal-s, a.pc-btn-sec, a.btn-home,
+  a.btn-wpp, a.btn-disq-wpp, a.btn-disq-back, a.cta, a.state-btn,
+  a.st-btn, a.cta-a, a.plink, a.back, a.ficon, a.soc, a.lnk, a.s-btn):active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--ll-depth-edge),
+              0 5px 12px var(--ll-depth-glow),
+              inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+body :is(button, a.nav-cta, a.n-cta, a.btn-p, a.btn-g, a.btn-w,
+  a.proj-btn, a.btn-modal-p, a.btn-modal-s, a.pc-btn-sec, a.btn-home,
+  a.btn-wpp, a.btn-disq-wpp, a.btn-disq-back, a.cta, a.state-btn,
+  a.st-btn, a.cta-a, a.plink, a.back, a.ficon, a.soc, a.lnk, a.s-btn):focus-visible {
+  outline: 2px solid #00f0ff;
+  outline-offset: 4px;
+}
+
+body :is(button:disabled, button[aria-disabled="true"]) {
+  transform: none;
+  box-shadow: 0 2px 0 var(--ll-depth-edge);
+  cursor: not-allowed;
+}
+
+body :is(.cm-submit, .nav-cta, .n-cta, .btn-p, .proj-btn, .btn-modal-p,
+  .btn-home, .state-btn, .st-btn, .cta-a, .nl-submit, .qc-send,
+  .btn-primary, .cat-btn.active, .filter-btn.active, .hc-tab.active,
+  .cm-tab.active, .opt.selected, #btn-save) {
+  --ll-depth-edge: #008696;
+  --ll-depth-glow: rgba(0, 240, 255, .24);
+}
+
+body :is(.nl-btn, .btn-nl-dispatch) {
+  --ll-depth-edge: #6435a9;
+  --ll-depth-glow: rgba(168, 85, 247, .22);
+}
+
+body :is(.btn-w, .btn-wpp, .btn-disq-wpp) {
+  --ll-depth-edge: #128047;
+  --ll-depth-glow: rgba(37, 211, 102, .22);
+}
+
+body #cookie-banner button {
+  border-radius: 8px !important;
+}
+body #cookie-banner button:last-child {
+  --ll-depth-edge: #008696;
+  --ll-depth-glow: rgba(0, 240, 255, .24);
+}
+
+/* Keep compact icon controls inside their fixed footprints. */
+body :is(.s-btn, .ficon, .soc, .bot-btn, .bot-snd, .modal-close,
+  .gallery-lightbox button, .video-actions button, .tb, .dr-x) {
+  --ll-depth-edge: #123846;
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body :is(button, a.nav-cta, a.n-cta, a.btn-p, a.btn-g, a.btn-w,
+    a.proj-btn, a.btn-modal-p, a.btn-modal-s, a.pc-btn-sec, a.btn-home,
+    a.btn-wpp, a.btn-disq-wpp, a.btn-disq-back, a.cta, a.state-btn,
+    a.st-btn, a.cta-a, a.plink, a.back, a.ficon, a.soc, a.lnk, a.s-btn) {
+    transition: none;
+  }
+}

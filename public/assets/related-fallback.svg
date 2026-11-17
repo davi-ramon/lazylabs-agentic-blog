@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title">
+  <title id="title">Lazy Labs Blog</title>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#080d1d"/><stop offset=".6" stop-color="#10102b"/><stop offset="1" stop-color="#050711"/></linearGradient>
+    <linearGradient id="line" x2="1" y2="1"><stop stop-color="#00f0ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M56 0H0V56" fill="none" stroke="#28304a" stroke-opacity=".35"/></pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <circle cx="970" cy="90" r="300" fill="#7035bc" opacity=".1"/>
+  <circle cx="100" cy="610" r="270" fill="#00f0ff" opacity=".07"/>
+  <path d="M164 502V174h75m722 0h75v328h-75" fill="none" stroke="url(#line)" stroke-width="8" stroke-linecap="square"/>
+  <path d="M285 450h630" stroke="#00f0ff" stroke-opacity=".25" stroke-width="2"/>
+  <text x="600" y="327" text-anchor="middle" fill="#f0efff" font-size="86" font-weight="800" font-family="Arial, sans-serif" letter-spacing="-5">LAZY <tspan fill="#00f0ff">LABS</tspan></text>
+  <text x="600" y="397" text-anchor="middle" fill="#9d9dbb" font-size="25" font-family="monospace" letter-spacing="12">BLOG</text>
+</svg>

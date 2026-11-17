@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Leitura publica (sem login) so de posts publicados — usado pelo listener
+    // em tempo real da homepage. Escrita sempre via Admin SDK (Cloud Functions),
+    // nunca direto do cliente (sem regra allow write = negado por padrao).
+    match /posts/{postId} {
+      allow read: if resource.data.status == 'published';
+
+      match /comments/{commentId} {
+        // A API publica apenas nome e mensagem; o documento contém e-mail.
+        allow read, write: if false;
+      }
+    }
+
+    // Tudo o mais (blogs, newsletter_subscribers, campaigns, config, etc.)
+    // continua negado por padrao — so acessivel via Admin SDK server-side.
+  }
+}

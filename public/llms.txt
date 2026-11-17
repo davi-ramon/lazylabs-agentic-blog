@@ -1,0 +1,18 @@
+# Lazy Labs Blog
+
+> Blog da Lazy Labs — cases reais, implementações técnicas e reflexões sobre IA, automação e desenvolvimento de software. Escrito por Equipe do Blog.
+
+Lazy Labs é uma consultoria independente de automação e IA para negócios (site institucional: https://example.com). Este blog documenta sistemas e agentes de IA construídos na prática — o que funcionou, o que deu errado, e o raciocínio por trás das decisões técnicas.
+
+## Conteúdo
+
+- [Home](https://blog.example.com/): lista de artigos publicados, com busca e filtro por categoria
+- [Sitemap](https://blog.example.com/sitemap.xml): lista completa e atualizada de todos os artigos publicados
+
+## Categorias
+
+Agentes de IA, CRM & Automação, Tráfego Pago, MicroSaaS, Sites & LPs, Reflexões.
+
+## Licença e uso
+
+O conteúdo é de autoria de Equipe do Blog / Lazy Labs. Resumos e citações com atribuição e link de volta são bem-vindos.

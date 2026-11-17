@@ -1,0 +1,22 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Gravações grandes são enviadas em partes pelo SDK para uma área privada.
+    // A Function valida o formato e move o vídeo para blog-video após o upload.
+    match /studio-uploads/{uid}/{videoId} {
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.role == 'admin'
+        && videoId.matches('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\.(mp4|webm)')
+        && request.resource.size > 0
+        && request.resource.size <= 1024 * 1024 * 1024
+        && (request.resource.contentType == 'video/mp4'
+          || request.resource.contentType == 'video/webm');
+      allow read, update, delete: if false;
+    }
+    // Demais objetos só podem ser criados/lidos pelo backend.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

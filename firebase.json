@@ -235,11 +235,12 @@
 	  }
 	},
 	{
+	  "source": "/api/v1",
+	  "function": { "functionId": "agentApi", "region": "southamerica-east1" }
+	},
+	{
 	  "source": "/api/v1/**",
-	  "run": {
-		"serviceId": "admin",
-		"region": "southamerica-east1"
-	  }
+	  "function": { "functionId": "agentApi", "region": "southamerica-east1" }
 	},
 	{
 	  "source": "/api/admin/**",

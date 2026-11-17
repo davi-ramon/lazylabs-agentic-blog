@@ -294,7 +294,8 @@ async function retryIncompleteTranslations() {
   console.log('[translations] retry', { attempted, completed });
 }
 
-async function handler(req, res) {
+async function handler(req, res, internalAuth) {
+  const requireAdmin = internalAuth && internalAuth.requireAdmin || adminModule.requireAdmin_;
   if (['GET','HEAD'].includes(req.method) && /^\/media\/(?:blog-content\/[0-9a-f-]{36}\.(?:png|jpg|webp|gif)|blog-video\/[0-9a-f-]{36}\.(?:mp4|webm))$/.test(req.path || '')) {
     const objectName = String(req.path).replace(/^\/media\//, '');
     try {
@@ -345,7 +346,7 @@ async function handler(req, res) {
     const publicActions = new Set(['list', 'taxonomyGet', 'feedPreview', 'related', 'incrementView', 'likes', 'toggleLike', 'comments', 'commentReplies', 'commentCreate', 'gifSearch', 'engagementOpen', 'engagementQualify', 'engagementRead', 'engagementClick', 'engagementStats']);
     let adminUser = null;
     if (!publicActions.has(action)) {
-      adminUser = await adminModule.requireAdmin_(req, res);
+      adminUser = await requireAdmin(req, res);
       if (!adminUser) return;
     }
     if (action === 'uploadImage') { await uploadImage(body, res); return; }
@@ -412,7 +413,7 @@ async function handler(req, res) {
       const hash = translations.sourceHash(existing);
       const patch = { status: status, updated_at: new Date().toISOString(), translation_hash: hash };
       if (existing.translation_hash !== hash) patch.translation_ready = [];
-      if (status === 'published') patch.published_at = new Date().toISOString();
+      if (status === 'published') { patch.published_at = new Date().toISOString(); patch.scheduled_at = null; }
       await ref.set(patch, { merge: true });
       invalidateRelatedIndex();
       let translation = null;
@@ -450,7 +451,7 @@ async function handler(req, res) {
 
     if (action === 'list') {
       if (body.status !== 'published' || body.blog_id !== DEFAULT_BLOG_ID) {
-        const user = await adminModule.requireAdmin_(req, res, { anyRole: true });
+        const user = await requireAdmin(req, res, { anyRole: true });
         if (!user) return;
       }
       let q = pdb().collection('posts');
@@ -591,4 +592,31 @@ async function handler(req, res) {
   }
 }
 
-module.exports = { handler: handler, retryIncompleteTranslations, processTranslationTask, feedExcerpt, resolveShortVideoUrl, mapPost };
+async function publishDueScheduledPosts() {
+  const now = new Date().toISOString();
+  const due = await pdb().collection('posts').where('status', '==', 'scheduled')
+    .where('scheduled_at', '<=', now).orderBy('scheduled_at', 'asc').limit(25).get();
+  let published = 0;
+  for (const doc of due.docs) {
+    const row = await pdb().runTransaction(async transaction => {
+      const fresh = await transaction.get(doc.ref);
+      if (!fresh.exists) return null;
+      const current = fresh.data();
+      if (current.blog_id !== DEFAULT_BLOG_ID || current.status !== 'scheduled' ||
+          !current.scheduled_at || current.scheduled_at > now) return null;
+      const patch = { status:'published', published_at:now, scheduled_at:null, updated_at:now };
+      transaction.update(doc.ref, patch);
+      return { ...current, ...patch };
+    });
+    if (!row) continue;
+    published++;
+    invalidateRelatedIndex();
+    try {
+      const translation = await queueTranslations(doc.id, row);
+      await pingPublished(doc.id, translation.ready);
+    } catch (error) { console.warn('[posts] pós-publicação pendente', doc.id, error?.message); }
+  }
+  return { published };
+}
+
+module.exports = { handler: handler, retryIncompleteTranslations, processTranslationTask, publishDueScheduledPosts, feedExcerpt, resolveShortVideoUrl, mapPost };

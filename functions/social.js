@@ -177,12 +177,12 @@ async function publishChannel(channel, post, config, options) {
   }
 }
 
-async function handler(req, res) {
+async function handler(req, res, internalAuth) {
   res.set('Access-Control-Allow-Origin', 'https://blog.example.com');
   res.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
   res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).send('');
-  const user = await requireAdmin_(req, res); if (!user) return;
+  const user = await (internalAuth && internalAuth.requireAdmin || requireAdmin_)(req, res); if (!user) return;
   const action = String(req.path || '').replace(/\/+$/, '').split('/').pop();
   try {
     if (action === 'draft') {

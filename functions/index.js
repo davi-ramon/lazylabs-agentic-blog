@@ -1236,6 +1236,10 @@ exports.posts = onRequest(
   { region: 'southamerica-east1', memory: '512MiB', timeoutSeconds: 300, maxInstances: 3 },
   postsModule.handler
 );
+exports.scheduledPostsPublish = onSchedule(
+  { schedule:'every 2 minutes', region:'southamerica-east1', memory:'256MiB', timeoutSeconds:300 },
+  postsModule.publishDueScheduledPosts
+);
 exports.reader = onRequest(
   { region: 'southamerica-east1', memory: '256MiB', timeoutSeconds: 30 },
   require('./reader').handler
@@ -1341,6 +1345,19 @@ const metaAppSecret = defineSecret('META_APP_SECRET');
 const metaWebhookVerifyToken = defineSecret('META_WEBHOOK_VERIFY_TOKEN');
 const metaSystemUserToken = defineSecret('META_SYSTEM_USER_TOKEN');
 const metaInstagramUserToken = defineSecret('META_INSTAGRAM_USER_TOKEN');
+const agentApiModule = require('./agent-api');
+const agentNewsletterHandler = newsletterModule.createHandler({
+  db,
+  requireAdmin:async () => ({ uid:'agent-api', role:'admin' }),
+  getFormConfig, buildFormEmail, esc, json:liJson
+});
+exports.agentApi = onRequest(
+  { region:'southamerica-east1', memory:'512MiB', timeoutSeconds:540, maxInstances:3,
+    invoker:'public', secrets:[metaSystemUserToken, metaInstagramUserToken] },
+  (req, res) => agentApiModule.handler(req, res, {
+    posts:postsModule, newsletter:agentNewsletterHandler, social:socialModule, automations:metaAutomations
+  })
+);
 exports.metaWebhook = onRequest(
   { region:'southamerica-east1', memory:'256MiB', timeoutSeconds:60, invoker:'public', secrets:[metaAppSecret, metaWebhookVerifyToken] },
   metaAutomations.webhook

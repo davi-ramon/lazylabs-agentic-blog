@@ -53,4 +53,4 @@ O Firebase CLI pode pedir índices adicionais para consultas novas. `firestore.i
 
 ## Limites de portabilidade
 
-O código mantém o visual e certas decisões de produto da Lazy Labs. `functions/api.js` é experimental e não está conectado ao Firebase exportado. A automação Meta usa consulta periódica de dois minutos além do webhook, com custo potencial; não há escala ilimitada. Revise CORS, URLs, templates de e-mail, métricas, marcas e conteúdo editorial para sua instalação. Não importe dados ou contatos de outra pessoa sem base e consentimento adequados.
+O código mantém o visual e certas decisões de produto da Lazy Labs. A API para agentes está em `functions/agent-api.js`; `functions/api.js` permanece legado e não é exportado. Configure tokens no admin após implantar e consulte [API para agentes](AGENT_API.md). A automação Meta usa consulta periódica de dois minutos além do webhook, com custo potencial; não há escala ilimitada. Revise CORS, URLs, templates de e-mail, métricas, marcas e conteúdo editorial para sua instalação. Não importe dados ou contatos de outra pessoa sem base e consentimento adequados.

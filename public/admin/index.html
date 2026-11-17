@@ -2188,6 +2188,21 @@ select option{background:var(--bg2)}
 
       <!-- INTEGRACAO SUPABASE -->
       <div class="stab-content active" id="stab-integracao">
+        <div class="card agent-api-card" id="agent-api-card">
+          <div class="sec-title">API para agentes de IA</div>
+          <p>Crie um token privado para um agente operar o blog. Escolha somente as ações que ele poderá executar. Copie o segredo agora: ele não será exibido novamente.</p>
+          <div class="agent-api-form">
+            <label>Nome do agente<input id="agent-api-label" maxlength="60" placeholder="Ex.: Claude editor"></label>
+            <label>Validade<select id="agent-api-days"><option value="30">30 dias</option><option value="90" selected>90 dias</option><option value="365">1 ano</option></select></label>
+          </div>
+          <div id="agent-api-scopes" class="agent-api-scopes"></div>
+          <button type="button" class="btn-settings primary" id="agent-api-create">Gerar token</button>
+          <div id="agent-api-secret" class="agent-api-secret" hidden></div>
+          <div id="agent-api-status" role="status"></div>
+          <div class="agent-api-list-head"><strong>Tokens ativos e revogados</strong><button type="button" class="btn-settings secondary" id="agent-api-refresh">Atualizar</button></div>
+          <div id="agent-api-list"></div>
+          <p class="agent-api-docs">Documentação: <a href="/api/v1/openapi.json" target="_blank" rel="noopener">OpenAPI (requer token)</a> · <code>/api/v1/capabilities</code></p>
+        </div>
         <div class="card" id="davi-integration-card">
           <div class="sec-title">IA para artigos e capas</div>
           <p class="builder-geo-hint">Configure aqui a IA de texto, a geração de capas e a chave de transcrição. Os tokens ficam no servidor.</p>
@@ -7559,6 +7574,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <script src="/admin/social-preview.js?v=20261029"></script>
 <script src="/admin/products-admin.js?v=20261030"></script>
 <script src="/admin/newsletter.js?v=20261116a"></script>
+<link rel="stylesheet" href="/admin/agent-api.css?v=20261117">
+<script src="/admin/agent-api.js?v=20261117" defer></script>
 
 <div class="article-button-dialog" id="article-button-dialog" role="dialog" aria-modal="true" aria-labelledby="article-button-title" hidden>
   <div class="article-button-panel">

@@ -7,7 +7,7 @@ Base URL após implantação: `https://SEU-DOMINIO`. O [mapa de rotas](ROUTES.md
 - **Admin:** `Authorization: Bearer <FIREBASE_ID_TOKEN>`; o backend valida o token e exige custom claim `role=admin` ou e-mail verificado igual a `ADMIN_OWNER_EMAIL`. Alguns endpoints de leitura aceitam `viewer`.
 - **Leitor:** Firebase ID token para favoritos e recursos de conta.
 - **Meta webhook:** desafio GET com token de verificação e POST com assinatura `X-Hub-Signature-256`; não usa ID token de admin.
-- **API REST v1 experimental:** `functions/api.js` descreve tokens próprios com hash SHA-256 e escopos, mas não está exportada nem roteada. **Não use `/api/v1` para publicar nesta versão.**
+- **API REST v1 ativa:** `functions/agent-api.js` aceita tokens privados com hash SHA-256 e escopos. Veja [o contrato e os exemplos](AGENT_API.md). `functions/api.js` é legado e não é exportado.
 
 As respostas costumam ser JSON `{ "ok": true, ... }` ou `{ "ok": false, "message": "..." }`; códigos HTTP variam por handler. Não trate `ok:true` como confirmação de entrega externa quando o retorno apenas enfileira uma tarefa.
 

@@ -35,7 +35,7 @@ O caminho completo, com etapas opcionais e limites, está em [docs/DEPLOYMENT.md
 | [Guia para agentes](AGENTS.md) | Como uma LLM deve navegar e alterar este código |
 | [Resumo do projeto](docs/PROJECT_BRIEF.md) | Contexto para candidatura a créditos de IA |
 
-O código de `functions/api.js` documenta uma API REST v1 experimental, mas **não está ligada ao export do Firebase nesta versão**. A rota `/api/v1/**` do Hosting cai no handler `admin`, portanto não trate o contrato experimental como funcional. As rotas operacionais estão em `docs/API.md`.
+A API REST v1 para agentes usa tokens privados com escopos. Consulte [API para agentes](docs/AGENT_API.md) para criar e revogar tokens, publicar, agendar e distribuir artigos. `functions/api.js` permanece legado e não é exportado.
 
 ## Licença
 

@@ -41,7 +41,7 @@ Gerado a partir de `firebase.json`. A ordem importa: a primeira regra correspond
 | `/api/davi` | `Cloud Run / Function davi` |
 | `/api/agent/**` | `Cloud Run / Function agent` |
 | `/api/agent` | `Cloud Run / Function agent` |
-| `/api/v1/**` | `Cloud Run / Function admin` |
+| `/api/v1/**` | `Cloud Run / Function agentApi` |
 | `/api/admin/**` | `Cloud Run / Function admin` |
 | `/api/devops/**` | `Cloud Run / Function devops` |
 | `/api/migrate` | `Cloud Run / Function migrate` |

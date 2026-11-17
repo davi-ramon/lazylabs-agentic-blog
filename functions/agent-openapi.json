@@ -1,0 +1,40 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Lazy Labs Blog Agent API", "version": "1.0.0", "description": "API editorial para agentes autorizados. Os escopos necessários são documentados por operação." },
+  "servers": [{ "url": "https://blog.example.com/api/v1" }],
+  "security": [{ "AgentToken": [] }],
+  "components": {
+    "securitySchemes": { "AgentToken": { "type": "http", "scheme": "bearer", "bearerFormat": "llb token" } },
+    "schemas": {
+      "PostInput": { "type": "object", "required": ["slug", "title", "content_html"], "properties": {
+        "slug": { "type": "string" }, "title": { "type": "string" }, "content_html": { "type": "string", "description": "HTML de artigo sanitizado no renderizador" },
+        "excerpt": { "type": "string" }, "category": { "type": "string" }, "post_type": { "type": "string" }, "tags": { "type": "array", "items": { "type": "string" } },
+        "cover_url": { "type": "string" }, "video_url": { "type": "string" }, "auto_translate": { "type": "boolean" }, "tts_enabled": { "type": "boolean" }
+      } }
+    }
+  },
+  "paths": {
+    "/health": { "get": { "security": [], "summary": "Estado da API", "responses": { "200": { "description": "Online" } } } },
+    "/capabilities": { "get": { "summary": "Capacidades e escopos do token", "responses": { "200": { "description": "Capacidades" } } } },
+    "/openapi.json": { "get": { "summary": "Este documento", "responses": { "200": { "description": "OpenAPI" } } } },
+    "/tokens": { "get": { "summary": "Lista tokens; requer sessão de administrador Firebase", "responses": { "200": { "description": "Tokens sem hashes" } } }, "post": { "summary": "Emite token; requer administrador Firebase", "responses": { "201": { "description": "Segredo exibido uma vez" } } } },
+    "/tokens/{id}": { "delete": { "summary": "Revoga token; requer administrador Firebase", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Revogado" } } } },
+    "/posts": { "get": { "summary": "Lista artigos; posts:read", "parameters": [{ "name": "status", "in": "query", "schema": { "type": "string", "enum": ["published", "draft", "scheduled", "archived"] } }], "responses": { "200": { "description": "Até 200 artigos" } } }, "post": { "summary": "Cria rascunho; posts:write", "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PostInput" } } } }, "responses": { "200": { "description": "Criado" } } } },
+    "/posts/{slug}": { "parameters": [{ "name": "slug", "in": "path", "required": true, "schema": { "type": "string" } }], "get": { "summary": "Lê artigo; posts:read", "responses": { "200": { "description": "Artigo" } } }, "patch": { "summary": "Edita artigo; posts:write e posts:publish se publicado", "responses": { "200": { "description": "Atualizado" } } }, "delete": { "summary": "Exclui artigo; posts:delete", "responses": { "200": { "description": "Excluído" } } } },
+    "/posts/{slug}/publish": { "post": { "summary": "Publica artigo; posts:publish", "responses": { "200": { "description": "Publicado" } } } },
+    "/posts/{slug}/schedule": { "post": { "summary": "Agenda artigo; posts:schedule; JSON scheduled_at ISO 8601", "responses": { "200": { "description": "Agendado" } } } },
+    "/posts/{slug}/archive": { "post": { "summary": "Arquiva artigo; posts:publish", "responses": { "200": { "description": "Arquivado" } } } },
+    "/posts/{slug}/translate": { "post": { "summary": "Inicia tradução; posts:publish", "responses": { "200": { "description": "Enfileirado" } } } },
+    "/media/embed": { "post": { "summary": "Gera HTML seguro para vídeos; media:write; JSON url ou urls", "responses": { "200": { "description": "HTML" } } } },
+    "/media/image": { "post": { "summary": "Envia imagem em base64; media:write", "responses": { "200": { "description": "URL" } } } },
+    "/media/video": { "post": { "summary": "Envia vídeo em base64; media:write", "responses": { "200": { "description": "URL" } } } },
+    "/newsletter/campaigns": { "get": { "summary": "Lista campanhas; newsletter:read", "responses": { "200": { "description": "Campanhas" } } } },
+    "/newsletter/campaigns/{id}": { "get": { "summary": "Detalhes da campanha; newsletter:read", "responses": { "200": { "description": "Destinatários e métricas" } } } },
+    "/newsletter/send": { "post": { "summary": "Dispara artigo publicado; newsletter:send; requer Idempotency-Key", "responses": { "200": { "description": "Enviado" }, "409": { "description": "Chave já usada" } } } },
+    "/social/draft": { "post": { "summary": "Prepara posts sociais; social:write", "responses": { "200": { "description": "Rascunhos" } } } },
+    "/social/publish": { "post": { "summary": "Publica em canal configurado; social:write; requer Idempotency-Key", "responses": { "200": { "description": "Publicado" }, "409": { "description": "Chave já usada" } } } },
+    "/automations": { "get": { "summary": "Lista regras Meta; automations:read", "responses": { "200": { "description": "Regras" } } }, "post": { "summary": "Cria ou altera regra Meta; automations:write", "responses": { "200": { "description": "Regra" } } } },
+    "/automations/{id}": { "delete": { "summary": "Desativa regra Meta; automations:write", "responses": { "200": { "description": "Desativada" } } } }
+  }
+}
+

@@ -579,8 +579,8 @@ async function listMedia(channel, after = '') {
   }
   throw new Error('Canal inválido.');
 }
-async function admin(req, res) {
-  const user = await requireAdmin_(req, res); if (!user) return;
+async function admin(req, res, internalAuth) {
+  const user = await (internalAuth && internalAuth.requireAdmin || requireAdmin_)(req, res); if (!user) return;
   try {
     const collection = db().collection(RULES);
     if (req.method === 'GET') {
